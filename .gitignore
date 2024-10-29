@@ -3,7 +3,7 @@ frontend/node_modules/
 frontend/build/
 
 # Backend
-backend/__pycache__/
+*.pyc
 backend/venv/
 
 # Environment variables
