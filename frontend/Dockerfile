@@ -1,18 +1,16 @@
-FROM node:22 as build-step
+FROM node:22
 
 WORKDIR /app-home
 
 ENV PATH /app-home/node_modules/.bin:$PATH
 
 COPY package.json package-lock.json ./
+
+RUN yarn install
+
 COPY ./src ./src
 COPY ./public ./public
 
-RUN yarn install
-RUN yarn build
+ENV WATCHPACK_POLLING=true
 
-
-FROM nginx:stable
-
-COPY --from=build-step /app-home/build /usr/share/nginx/html
-COPY deployment/nginx.default.conf /etc/nginx/conf.d/default.conf
+CMD ["npm", "start"]
