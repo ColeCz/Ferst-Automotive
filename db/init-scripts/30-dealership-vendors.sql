@@ -1,0 +1,22 @@
+\c dealership;
+
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Bioholding', '3147649840', '5884 14-street', 'Columbus', 'OH', '48111');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('dambase', '9772455939', '1961 17-street', 'Raleigh', 'FL', '93296');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Goodsilron', '2769660841', '2841 3-street', 'Tucson', 'CA', '08824');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Hottechi', '6409490160', '4747 19-street', 'Winston-Salem', 'AZ', '79145');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('J-Texon', '0808543265', '901 5-street', 'Houston', 'TX', '09058');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Kan-code', '2395987676', '6217 10-street', 'Norfolk', 'NC', '06008');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Lexiqvolax', '1208843903', '2838 17-street', 'Santa Ana', 'MO', '31193');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Nam-zim', '3316075976', '5536 8-street', 'Mesa', 'VA', '24144');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Opentech', '1444384511', '6246 17-street', 'Richmond', 'CA', '28498');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Plexzap', '0815067911', '7571 16-street', 'St. Louis', 'CA', '32742');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Plusstrip', '1564101797', '9702 17-street', 'Nashville-Davidson', 'MD', '11071');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Rantouch', '5858845521', '5326 18-street', 'Newark', 'TX', '91854');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Rundofase', '9859832716', '4770 8-street', 'Kansas City', 'AZ', '77862');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Scottech', '1132929076', '4993 1-street', 'Columbus', 'OH', '19652');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Silis', '1627159429', '3900 8-street', 'Oakland', 'MN', '24525');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Sonron', '1894369640', '6275 2-street', 'Orlando', 'FL', '73216');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Statholdings', '6944638738', '4273 1-street', 'Houston', 'TX', '80686');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Toughzap', '1499979250', '8085 14-street', 'Raleigh', 'FL', '78641');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Zotware', '7698149359', '9246 9-street', 'Winston-Salem', 'AZ', '25414');
+INSERT INTO Vendor (vendor_name, phone_num, street, city, state_abbrv, postal_code) VALUES ('Zumgoity', '7359402191', '851 11-street', 'Tulsa', 'OH', '47865');

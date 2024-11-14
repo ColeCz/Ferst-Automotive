@@ -13,7 +13,7 @@ CREATE TABLE Customer
 
 CREATE TABLE Business
 (
-	tin           CHAR(9),
+	tin           CHAR(10),
 	business_name VARCHAR(64)                               NOT NULL,
 	title         VARCHAR(64)                               NOT NULL,
 	firstname     VARCHAR(64)                               NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Vehicle
 	fuel_type    VARCHAR(64) CHECK (fuel_type IN ('Gas', 'Diesel', 'Natural Gas', 'Hybrid', 'Plugin Hybrid', 'Battery',
 												  'Fuel Cell')) NOT NULL,
 	horsepower   INTEGER                                        NOT NULL,
-	description  VARCHAR(64)
+	description  VARCHAR(256)
 );
 
 CREATE TABLE Color
@@ -134,9 +134,8 @@ CREATE TABLE Part
 (
 	vehicle_vin      CHAR(17)                                                                   NOT NULL,
 	order_number     VARCHAR(10)                                                                NOT NULL,
-	part_number      INT                                                                        NOT NULL,
-	current_status   VARCHAR(64) CHECK (current_status IN ('Ordered', 'Recieved', 'Installed')) NOT NULL,
-	vendor_number    VARCHAR(64)                                                                NOT NULL,
+	part_number      VARCHAR(64)                                                                NOT NULL,
+	current_status   VARCHAR(64) CHECK (current_status IN ('ORDERED', 'RECEIVED', 'INSTALLED')) NOT NULL,
 	unit_price       INTEGER                                                                    NOT NULL,
 	part_description VARCHAR(300)                                                               NOT NULL,
 	quantity         INTEGER                                                                    NOT NULL,
