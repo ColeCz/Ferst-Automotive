@@ -36,6 +36,8 @@ services:
     hostname: backend
     build:
       context: ./backend/
+    environment:
+      DB_URL: "postgresql://dealership:dealership@db/dealership"
     ports:
       - "8081:5000"
     depends_on:
