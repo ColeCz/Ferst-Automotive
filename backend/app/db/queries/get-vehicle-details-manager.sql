@@ -14,4 +14,4 @@ LEFT JOIN Part part ON po.vehicle_vin = part.vehicle_vin
     AND po.order_num = part.order_number
 LEFT JOIN Transaction st ON v.vin = st.vehicle_vin
 LEFT JOIN Sale s ON st.trans_id = s.transactions
-WHERE v.vin = $(vin)s;
+WHERE v.vin = %(vin)s;

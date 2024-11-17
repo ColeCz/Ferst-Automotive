@@ -8,4 +8,4 @@ SELECT v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel
         AND p.current_status != 'INSTALLED'
     ) AS can_sell_vehicle
 FROM Vehicle v
-WHERE v.vin = $(vin)s;
+WHERE v.vin = %(vin)s;

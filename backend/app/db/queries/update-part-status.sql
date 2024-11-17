@@ -2,5 +2,5 @@ SELECT p.part_number, p.part_description, p.vendor_number, p.current_status, p.u
 FROM Part p
 JOIN PartOrder po ON p.vehicle_vin = po.vehicle_vin
     AND p.order_number = po.order_num
-WHERE p.vehicle_vin = $(vin)s
+WHERE p.vehicle_vin = %(vin)s
 ORDER BY p.part_number;
