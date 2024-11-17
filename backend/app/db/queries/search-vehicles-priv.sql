@@ -8,11 +8,11 @@ AND (%(vehicle_type)s IS NULL OR v.vehicle_type = %(vehicle_type)s)
 	AND (%(year)s IS NULL OR v.model_year = %(year)s)
 	AND (%(fuel_type)s IS NULL OR v.fuel_type = %(fuel_type)s)
 	AND (%(vin)s IS NULL OR v.vin = %(vin)s)
-	AND (%(description)s IS NULL OR v.description ILIKE '%' || %(description)s || '%')
+	AND (%(description)s IS NULL OR v.description ILIKE '%' || %(description)s || '%') --TODO: is this right?
 	AND (%(color_name)s IS NULL OR EXISTS (
 		SELECT 1
 		FROM Color c2
 		WHERE c2.vin = v.vin AND c2.color_name = %(color_name)s
 ))
-AND t.trans_id IS NULL – Only unsold vehicles
+AND t.trans_id IS NULL -- Only unsold vehicles
 GROUP BY v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description;

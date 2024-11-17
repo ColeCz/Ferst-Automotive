@@ -10,11 +10,11 @@ FROM Customer c
 JOIN Business b ON c.customer_id = b.customer_id
 ),
 seller_metrics AS (
-	SELECT c.customer_id, COUNT(DISTINCT t.vehicle_vin) AS total_vehicles_sold, AVG(t.trans_price) AS avg_purchase_price, COUNT(p.part_order) / COUNT(DISTINCT t.vehicle_vin) AS cost_per_vehicle
+	SELECT c.customer_id, COUNT(DISTINCT t.vehicle_vin) AS total_vehicles_sold, AVG(t.trans_price) AS avg_purchase_price, COUNT(p.order_number) / COUNT(DISTINCT t.vehicle_vin) AS cost_per_vehicle
 	FROM Customer c
 	JOIN Transaction t ON c.customer_id = t.customer
-	LEFT JOIN PartOrder po ON t.vehicle_vin = po.vehicle
-	LEFT JOIN Part p ON po.order_num = p.part_order
+	LEFT JOIN PartOrder po ON t.vehicle_vin = po.vehicle_vin
+	LEFT JOIN Part p ON po.order_number = p.order_number
 	GROUP BY c.customer_id
 )
 SELECT

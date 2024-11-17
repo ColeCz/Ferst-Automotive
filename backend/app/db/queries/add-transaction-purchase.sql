@@ -3,9 +3,9 @@ WITH new_transaction AS (
 	VALUES (CURRENT_TIMESTAMP, %(sale_price)s, %(customer_id)s, %(vehicle_vin)s)
 	RETURNING trans_id
 )
-INSERT INTO Purchase (transactions, salesperson, condition)
+INSERT INTO Purchase (transactions, clerk, condition)
 VALUES (
 	(SELECT trans_id FROM new_transaction),
-	%(current_salesperson_name)s,
+	%(current_clerk+_name)s,
     %(condition)s
 );

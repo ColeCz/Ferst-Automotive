@@ -9,5 +9,5 @@ AND (%(manufacturer)s IS NULL OR v.manufacturer = %(manufacturer)s)
 AND (%(year)s IS NULL OR v.model_year = %(year)s)
 AND (%(fuel_type)s IS NULL OR v.fuel_type = %(fuel_type)s)
 AND (%(description)s IS NULL OR v.description = %(description)s)
-AND t.trans_id IS NULL – Only get unsold vehicles
+AND t.trans_id IS NULL -- Only get unsold vehicles
 GROUP BY v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description;

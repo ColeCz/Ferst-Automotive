@@ -13,5 +13,5 @@ LEFT JOIN (
 	FROM Transaction t3
 	WHERE t3.trans_id = p.trans_id
 )
-WHERE EXTRACT(MONTH FROM t.trans_date) = $month
-AND EXTRACT(YEAR FROM t.trans_date) = $year;
+WHERE EXTRACT(MONTH FROM t.trans_date) = %(month)s
+AND EXTRACT(YEAR FROM t.trans_date) = %(year)s;
