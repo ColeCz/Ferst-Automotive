@@ -7,4 +7,4 @@ FROM Vehicle v
 LEFT JOIN Color c ON v.vin = c.vin
 LEFT JOIN Transaction t ON v.vin = t.vehicle_vin
 LEFT JOIN Sale s ON t.trans_id = s.transactions
-WHERE v.vin = $(vin)s;
+WHERE v.vin = %(vin)s;

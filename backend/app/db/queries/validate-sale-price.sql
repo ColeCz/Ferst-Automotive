@@ -4,5 +4,5 @@ LEFT JOIN (
 Sale s
 	JOIN Transactions t ON s.transactions = t.trans_id
 ) ON t.vehicle_vin = v.vin
-WHERE v.vin = $(vin)s
+WHERE v.vin = %(vin)s
 	AND t.trans_id IS NULL;

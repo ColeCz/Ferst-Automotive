@@ -1,6 +1,6 @@
-import app.db
-import app.main
-import app.vehicle
+import backend.app.db
+import backend.app.main
+import backend.app.vehicle
 
 from flask import Flask
 

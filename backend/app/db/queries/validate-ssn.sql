@@ -1,3 +1,3 @@
 SELECT ssn
 FROM Individual
-WHERE ssn = $(ssn)s;
+WHERE ssn = %(ssn)s;

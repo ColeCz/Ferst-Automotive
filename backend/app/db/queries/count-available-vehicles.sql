@@ -8,7 +8,7 @@ LEFT JOIN (
 WHERE sold.vehicle_vin IS NULL
 	AND NOT EXISTS (
 		SELECT 1
-		FROM Parts p
+		FROM Part p
 		WHERE p.vehicle_vin = v.vin
-			AND p.current_status IN ('ORDERED', 'RECEIVED') --renamed status to current_status and capitalized ORDERED and RECEIVED
+			AND p.current_status IN ('ORDERED', 'RECEIVED')
 	);
