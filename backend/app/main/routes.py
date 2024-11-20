@@ -1,8 +1,7 @@
 import psycopg
-print(psycopg.__version__)
 
-from backend.app import db
-from backend.app.main import blueprint
+from app import db
+from . import blueprint
 
 
 @blueprint.route("/")

@@ -1,4 +1,4 @@
-from app.vehicle import blueprint
+from . import blueprint
 
 @blueprint.route("/get")
 def get_vehicle():

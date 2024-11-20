@@ -4,7 +4,7 @@ from flask import request
 from flask import session
 from psycopg.rows import dict_row
 
-from app.auth import blueprint
+from . import blueprint
 from app.db import get_connection_info
 from app.db import get_query
 
