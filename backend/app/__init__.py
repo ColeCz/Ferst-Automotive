@@ -4,10 +4,12 @@ import app.auth
 import app.vehicle
 
 from flask import Flask
+from flask_cors import CORS
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     app.secret_key = "2a678c251a30e17249729a70012c88445cb117ba1e74d2c475c0186cd3a06053"
 

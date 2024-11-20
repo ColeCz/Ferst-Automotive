@@ -1,3 +1,4 @@
 flask
 psycopg[binary]
 gunicorn
+flask-cors
