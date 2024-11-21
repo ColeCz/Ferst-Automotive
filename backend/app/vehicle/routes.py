@@ -1,5 +1,4 @@
 import datetime
-import psycopg
 
 from flask import request
 from flask import session
@@ -10,14 +9,15 @@ from app import db
 
 
 def query_db(query_name: str, query_parameters: dict = None):
-    with psycopg.connect(db.get_connection_info()) as conn:
-        try:
-            with conn.cursor() as cur:
-                cur.execute(db.get_query(query_name), query_parameters)
-                result = cur.fetchall()
-                return result if result else None
-        except Exception as e:
-            return f"Error: {e}"
+    conn = db.get_connection()
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute(db.get_query(query_name), query_parameters)
+            result = cur.fetchall()
+            return result if result else None
+    except Exception as e:
+        return f"Error: {e}"
     
 
 # route for searching vehicles, for all permissions

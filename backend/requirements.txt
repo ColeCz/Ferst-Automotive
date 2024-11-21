@@ -1,4 +1,4 @@
 flask
-psycopg[binary]
+psycopg[binary,pool]
 gunicorn
 flask-cors

@@ -1,5 +1,3 @@
-import psycopg
-
 from app import db
 from . import blueprint
 
@@ -10,6 +8,7 @@ def root():
 
 @blueprint.route("/ping")
 def ping():
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            return cur.execute(db.get_query("ping")).fetchone()[0]
+    con = db.get_connection()
+
+    with con.cursor() as cur:
+        return cur.execute(db.get_query("ping")).fetchone()[0]
