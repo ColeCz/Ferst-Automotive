@@ -1,34 +1,23 @@
-from . import blueprint
 import datetime
-from flask import jsonify, request, session
 import psycopg
 
-DB_HOST = 'db'  
-DB_PORT = '5432'
-DB_NAME = 'dealership'
-DB_USER = 'dealership'
-DB_PASSWORD = 'dealership'
+from flask import request
+from flask import session
 
-def connect_db():
-    try:
-        conn = psycopg.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
-        return conn
-    except Exception as e:
-        return f"Error: {e}"
-    
-def query_db(path_to_query, query_parameters=None):
-    conn = connect_db()
-    try:
-        with open(path_to_query, 'r') as file:
-            query = file.read()
+from . import blueprint
+from app import auth
+from app import db
 
-        with conn.cursor() as cur:
-            cur.execute(query, query_parameters)
-            result = cur.fetchall()
-            return result if result else None
-    except Exception as e:
-        return f"Error: {e}"
-    finally: conn.close()
+
+def query_db(query_name: str, query_parameters: dict = None):
+    with psycopg.connect(db.get_connection_info()) as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute(db.get_query(query_name), query_parameters)
+                result = cur.fetchall()
+                return result if result else None
+        except Exception as e:
+            return f"Error: {e}"
     
 
 # route for searching vehicles, for all permissions
@@ -52,45 +41,44 @@ def search_vehicles():
 
     # ensure year is valid (likely handled in frontend as well)
     year = request.args.get('year')
-    if year and int(year) > datetime.now().year + 1:
-        return jsonify({"error": f"Vehicles of year {year} have not been made yet"})
+    if year and int(year) > datetime.date.today().year + 1:
+        return {"error": f"Vehicles of year {year} have not been made yet"}
 
     # ensure only employees search with vin (likely handled in frontend as well)
     if parameters['vin']:
-        if not (session.get('manager') or session.get('clerk') or session.get('salesperson') or session.get('owner')):
-            return jsonify({"error": "Only employees can search with VIN"})
+        if not (auth.has_role('manager') or auth.has_role('clerk') or auth.has_role('salesperson') or auth.has_role('owner')):
+            return {"error": "Only employees can search with VIN"}
         
     # manager/owner priveleged search
-    if session.get('manager') or session.get('owner'):
-        available_vehicles_count = query_db('app/db/queries/count-available-vehicles.sql')
-        vehicles_awaiting_parts_count = query_db('app/db/queries/count-pending-parts-vehicles.sql')
+    if auth.has_role('manager') or auth.has_role('owner'):
+        available_vehicles_count = query_db('count-available-vehicles')
+        vehicles_awaiting_parts_count = query_db('count-pending-parts-vehicles')
         matching_vehicles_count = None  # not returned on manager/owner search
 
         if session.get('search_filter') == "unsold":
-            matching_vehicles = query_db('app/db/queries/search-vehicles-unsold.sql', parameters)   # TODO check query select statement
+            matching_vehicles = query_db('search-vehicles-unsold', parameters)   # TODO check query select statement
         elif session.get('search_filter') == "sold":
-            matching_vehicles = query_db('app/db/queries/search-vehicles-sold.sql', parameters)     # TODO check query select statement
+            matching_vehicles = query_db('search-vehicles-sold', parameters)     # TODO check query select statement
         else:
-            matching_vehicles = query_db('app/db/queries/search-vehicles-all.sql', parameters)      # TODO check query select statement
+            matching_vehicles = query_db('search-vehicles-all', parameters)      # TODO check query select statement
 
     # clerk priveleged search (likely combining with owner/manager search)
-    elif session.get('clerk'): 
-        matching_vehicles = query_db('app/db/queries/search-vehicles-unsold.sql')
-        available_vehicles_count = query_db('app/db/queries/count-available-vehicles.sql')
-        vehicles_awaiting_parts_count = query_db('app/db/queries/count-pending-parts-vehicles.sql')
+    elif auth.has_role('clerk'):
+        matching_vehicles = query_db('search-vehicles-unsold')
+        available_vehicles_count = query_db('count-available-vehicles')
+        vehicles_awaiting_parts_count = query_db('count-pending-parts-vehicles')
         matching_vehicles_count = None  # not returned on clerk search
 
     # nonpriveleged search for users/salespeople
     else:
-        matching_vehicles = query_db('app/db/queries/search-vehicles.sql')
-        matching_vehicles_count = query_db('app/db/queries/count-matching-vehicles.sql')            # TODO create this query
+        matching_vehicles = query_db('search-vehicles')
+        matching_vehicles_count = query_db('count-matching-vehicles')            # TODO create this query
         available_vehicles_count = None       # not returned on general search
         vehicles_awaiting_parts_count = None  # not returned on general search
 
-    return jsonify({
+    return {
         "matching_vehicles": matching_vehicles,
         "available_vehicles_count": available_vehicles_count,
         "vehicles_awaiting_parts_count": vehicles_awaiting_parts_count,
         "matching_vehicles_count": matching_vehicles_count
-    })
-
+    }

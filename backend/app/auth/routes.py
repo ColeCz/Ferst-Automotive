@@ -33,16 +33,17 @@ def login():
 
             group_row = cur.fetchone()
 
-            session.clear()
+    session.clear()
 
-            session["username"] = auth_row["username"]
-            session["roles"] = {
-                "clerk": group_row["isclerk"],
-                "salesperson": group_row["issalesperson"],
-                "manager": group_row["ismanager"],
-            }
+    session["username"] = auth_row["username"]
+    session["roles"] = {
+        "clerk": group_row["isclerk"],
+        "salesperson": group_row["issalesperson"],
+        "manager": group_row["ismanager"],
+        "owner": auth_row["username"] == "owner"
+    }
 
-            return {"success": True, "message": ""}
+    return {"success": True, "message": ""}
 
 @blueprint.route("/logout", methods=["POST"])
 def logout():
