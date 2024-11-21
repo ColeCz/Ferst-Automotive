@@ -1,0 +1,1 @@
+DELETE FROM Transaction WHERE trans_id = %(trans_id)s

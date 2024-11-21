@@ -99,7 +99,7 @@ CREATE TABLE Transaction
 
 CREATE TABLE Purchase
 (
-	transactions INTEGER REFERENCES Transaction (trans_id),
+	transactions INTEGER REFERENCES Transaction (trans_id) ON DELETE CASCADE,
 	clerk        VARCHAR(64) REFERENCES Clerk (username)                                     NOT NULL,
 	condition    VARCHAR(20) CHECK (condition IN ('Excellent', 'Very Good', 'Good', 'Fair')) NOT NULL,
 	PRIMARY KEY (transactions)
@@ -107,7 +107,7 @@ CREATE TABLE Purchase
 
 CREATE TABLE Sale
 (
-	transactions INTEGER REFERENCES Transaction (trans_id),
+	transactions INTEGER REFERENCES Transaction (trans_id) ON DELETE CASCADE,
 	salesperson  VARCHAR(64) REFERENCES Salesperson (username) NOT NULL,
 	PRIMARY KEY (transactions)
 );

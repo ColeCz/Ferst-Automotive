@@ -1,0 +1,96 @@
+from flask import request
+from psycopg.rows import dict_row
+
+from app import auth
+from app import db
+from . import blueprint
+
+
+@blueprint.route("/get")
+def get():
+    req_id = request.args.get("id")
+
+    con = db.get_connection()
+
+    with con.cursor() as cur:
+        cur.execute(db.get_query("get-transaction"), {"trans_id": req_id})
+        cur.row_factory = dict_row
+
+        row = cur.fetchone()
+
+    if row:
+        row["trans_date"] = row["trans_date"].isoformat()
+
+    return row or {}
+
+@blueprint.route("/add", methods=["POST"])
+def add():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
+    params = {
+        "trans_price": request.form.get("price"),
+        "customer": request.form.get("customer"),
+        "vehicle_vin": request.form.get("vin")
+    }
+
+    trans_type = request.form.get("type")
+    match trans_type:
+        case "PURCHASE":
+            if not auth.has_role("clerk"):
+                return {"success": False, "message": "User does not have clerk role"}
+
+            query = db.get_query("add-transaction-purchase")
+            params |= {
+                "clerk": auth.get_username(),
+                "condition": request.form.get("condition")
+            }
+        case "SALE":
+            if not auth.has_role("salesperson"):
+                return {"success": False, "message": "User does not have salesperson role"}
+
+            query = db.get_query("add-transaction-sale")
+            params |= {
+                "salesperson": auth.get_username()
+            }
+        case _:
+            return {"success": False, "message": "Unknown transaction type. Valid types: 'PURCHASE', 'SALE'"}
+
+    con = db.get_connection()
+
+    try:
+        with con.cursor() as cur:
+            cur.execute(query, params)
+
+        con.commit()
+    except Exception as e:
+        con.rollback()
+        return {"success": False, "message": f"Error: {e}"}
+
+    return {"success": True, "message": None}
+
+@blueprint.route("/delete", methods=["POST"])
+def delete():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+    elif not auth.has_role("owner"):
+        return {"success": False, "message": "User does not have owner role"}
+
+    trans_id = request.args.get("id")
+
+    con = db.get_connection()
+
+    try:
+        with con.cursor() as cur:
+            cur.execute(db.get_query("delete-transaction"), {"trans_id": trans_id})
+            rowcount = cur.rowcount
+
+        con.commit()
+    except Exception as e:
+        con.rollback()
+        return {"success": False, "message": f"Error: {e}"}
+
+    if rowcount > 0:
+        return {"success": True, "message": None}
+    else:
+        return {"success": False, "message": f"Transaction with id {trans_id} not found"}
