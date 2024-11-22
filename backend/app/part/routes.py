@@ -5,8 +5,8 @@ from . import blueprint
 
 
 @blueprint.route("/add-parts-order", methods=['POST'])
-def add_parts_order(vendor_name): # TODO how do I get the vendor_id, vin, and the part order number
-    vehicle_vin = request.args.get('vehicle_vin') # TODO - should I instead get this as a path or session variable?
+def add_parts_order(vendor_name):
+    vehicle_vin = request.args.get('vehicle_vin')
 
     with psycopg.connect(db.get_connection_info()) as con:
         with con.cursor() as cur:
@@ -31,8 +31,8 @@ def add_parts_order(vendor_name): # TODO how do I get the vendor_id, vin, and th
 @blueprint.route("/add-part", methods=['POST'])
 def add_part(vendor_id):
     # get last part order for the vin
-    vehicle_vin = request.args.get('vehicle_vin')   # TODO - should I instead get this as a path or session variable?
-    order_num = request.args.get('order_num')       # TODO - should I instead get this as a path or session variable?
+    vehicle_vin = request.args.get('vehicle_vin')
+    order_num = request.args.get('order_num')
 
     part_number = request.form.get('part_number')
     unit_price = request.form.get('unit_price')
