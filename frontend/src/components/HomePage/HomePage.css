@@ -1,0 +1,107 @@
+.homepage {
+  padding: 20px;
+}
+.header {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.metric-box {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  min-width: 200px;
+}
+.metric-box h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+.metric-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  flex-grow: 1;
+}
+.search-grid input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.search-button:hover {
+  background-color: #0056b3;
+}
+.action-buttons {
+  display: flex;
+  gap: 15px;
+}
+.action-buttons button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.add-vehicle {
+  background-color: #28a745;
+  color: white;
+}
+.view-reports {
+  background-color: #6c757d;
+  color: white;
+}
+.add-vehicle:hover {
+  background-color: #218838;
+}
+.view-reports:hover {
+  background-color: #5a6268;
+}
+.filter {
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+}
+.filter:hover {
+  background-color: #e0e0e0; /* slightly darker on hover */
+}
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.radio-group input[type="radio"] {
+  cursor: pointer;
+}
