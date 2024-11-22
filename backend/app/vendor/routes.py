@@ -6,7 +6,9 @@ from . import blueprint
 # searches for and returns a list of matching vendors using wildcards
 @blueprint.route("/search", methods=['GET'])
 def search_vendor():
-    vendor_search_name = request.args.get('vendor_search_name')
+    vendor_search_name = '%' + request.args.get('vendor_search_name') + '%'
+    # return vendor_search_name # WORKS
+
     with psycopg.connect(db.get_connection_info()) as con:
         with con.cursor() as cur:
             # query the database for matching vendors
@@ -26,7 +28,7 @@ def get_vendor():
     with psycopg.connect(db.get_connection_info()) as con:
         with con.cursor() as cur:
             # query the database for matching vendors
-            cur.execute(db.get_query('get-vendor'), {'vendor_name': vendor_name})
+            cur.execute(db.get_query('get-vendor-details'), {'vendor_name': vendor_name})
 
             vendor_details = cur.fetchone()
 
