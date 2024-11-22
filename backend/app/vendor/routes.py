@@ -7,7 +7,6 @@ from . import blueprint
 @blueprint.route("/search", methods=['GET'])
 def search_vendor():
     vendor_search_name = '%' + request.args.get('vendor_search_name') + '%'
-    # return vendor_search_name # WORKS
 
     with psycopg.connect(db.get_connection_info()) as con:
         with con.cursor() as cur:
@@ -19,7 +18,7 @@ def search_vendor():
             if not matching_vendors:
                 return {"success": False, "message": "No matching vendors found"}
             else:
-                return jsonify(matching_vendors)
+                return matching_vendors
 
 # for generally displaying info about the vendor on the frontend
 @blueprint.route("/get", methods=['GET'])
@@ -35,7 +34,7 @@ def get_vendor():
             if not vendor_details:
                 return {"success": False, "message": "Vendor not found"}
             else:
-                return jsonify(vendor_details)
+                return vendor_details
 
 @blueprint.route("/add", methods=['POST'])
 def add_vendor():
