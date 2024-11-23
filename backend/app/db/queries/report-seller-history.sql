@@ -34,9 +34,9 @@ SELECT
     si.seller_type, 
     sm.total_vehicles_sold, 
     -- If no purchase price, return NULL
-    COALESCE(sm.avg_purchase_price, NULL) AS avg_purchase_price, 
+    COALESCE(ROUND(sm.avg_purchase_price, 2), NULL) AS avg_purchase_price,
     -- If no cost per vehicle, return NULL
-    COALESCE(sm.cost_per_vehicle, NULL) AS cost_per_vehicle,
+    COALESCE(ROUND(sm.avg_purchase_price, 2), NULL) AS cost_per_vehicle,
     CASE
         WHEN sm.cost_per_vehicle > 500 THEN true  -- Flag if cost_per_vehicle is greater than 500
         ELSE false
