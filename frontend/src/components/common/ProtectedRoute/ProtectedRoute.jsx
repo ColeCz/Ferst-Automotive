@@ -1,34 +1,37 @@
-// This component uses roles to restrict user access to entire pages.
-import { useState, useEffect, useNavigate } from "react";
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { checkUserRole, hasRole } from '../../../utils/auth'
 
-const ProtectedRoute = ({ element: Element, requiredRole, ...rest }) => {
-  const [userRoles, setUserRoles] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const [userRoles, setUserRoles] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const response = await fetch('/api/auth/session');
-        const data = await response.json();
-        setUserRoles(data.roles);
+        const response = await fetch('/api/auth/session')
+        const data = await response.json()
+        setUserRoles(data.roles)
         if (!data.roles[requiredRole]) {
-          navigate('/');
+          navigate('/login') // when not auth'd, redirects to '/login'
         }
       } catch (error) {
-        console.error('Error fetching session:', error);
-        navigate('/');
+        console.error('Error fetching session:', error)
+        navigate('/')
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchSession();
-  }, [requiredRole, navigate]);
+    fetchSession()
+  }, [requiredRole, navigate])
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
-  return userRoles && userRoles[requiredRole] ? <Element {...rest} /> : null;
-};
+  return userRoles && userRoles[requiredRole] ? children : null
+}
+
+export default ProtectedRoute

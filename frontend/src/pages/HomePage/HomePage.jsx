@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ProtectedElement from '../common/ProtectedElement/ProtectedElement';
-import './HomePage.css';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Header from '../../components/common/Header/Header'
+import ProtectedElement from '../../components/common/ProtectedElement/ProtectedElement'
+import './HomePage.css'
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useState({
     vehicleType: '',
     manufacturer: '',
@@ -13,100 +14,110 @@ const HomePage = () => {
     fuelType: '',
     color: '',
     keyword: '',
-    filter: 'all'
-  });
+    filter: 'all',
+  })
   const [metrics, setMetrics] = useState({
     availableVehicles: 0,
-    pendingParts: 0
-  });
-  const [isLoading, setIsLoading] = useState(true); // only visible if reloading browser really quickly
-  const [filterSelection, setFilterSelection] = useState('all'); // defaults search filter to 'all'
+    pendingParts: 0,
+  })
+  const [isLoading, setIsLoading] = useState(true) // only visible if reloading browser really quickly
+  const [filterSelection, setFilterSelection] = useState('all') // defaults search filter to 'all'
   const [userRoles, setUserRoles] = useState({
     clerk: false,
     salesperson: false,
-    manager: false
-  });
+    manager: false,
+  })
 
   useEffect(() => {
-    fetchMetrics(); // defined below
-    fetchSession(); // defined below
+    fetchMetrics() // defined below
+    fetchSession() // defined below
   }, [])
 
-  const fetchMetrics = async () => { // fetches metrics for the top-left two widgets
-    setIsLoading(true);
+  const fetchMetrics = async () => {
+    // fetches metrics for the top-left two widgets
+    setIsLoading(true)
     try {
-      const response = await fetch('/api/vehicles/');  // adjust URL if needed later
+      const response = await fetch('/api/vehicles/') // adjust URL if needed later
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok')
       }
-      const data = await response.json();
+      const data = await response.json()
       setMetrics({
         availableVehicles: data.available_vehicles_count[0].available_vehicles,
-        pendingParts: data.vehicles_awaiting_parts_count[0].pending_parts || 0
-      });
+        pendingParts: data.vehicles_awaiting_parts_count[0].pending_parts || 0,
+      })
     } catch (error) {
-      console.error('Error fetching metrics:', error);
+      console.error('Error fetching metrics:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const fetchSession = async () => { // fetches user role from session info
+  const fetchSession = async () => {
+    // fetches user role from session info
     try {
-      const response = await fetch('http://localhost:8081/api/auth/session');
+      const response = await fetch('http://localhost:8081/api/auth/session')
       if (!response.ok) {
-        throw new Error('Failed to fetch session');
+        throw new Error('Failed to fetch session')
       }
-      const data = await response.json();
+      const data = await response.json()
       if (data.roles) {
-        setUserRoles(data.roles);
+        setUserRoles(data.roles)
       }
     } catch (error) {
-      console.error('Error fetching session:', error);
+      console.error('Error fetching session:', error)
     }
-  };
+  }
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSearchParams(prev => ({
+    const { name, value } = e.target
+    setSearchParams((prev) => ({
       ...prev,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
   const handleSearch = () => {
     const searchParamsWithFilter = {
       ...searchParams,
-      filter: filterSelection
-    };
-    console.log('Searching with params:', searchParams);
-    
+      filter: filterSelection,
+    }
+    console.log('Searching with params:', searchParams)
+
     // Implement search functionality w/ filter
-  };
+  }
+
+  
 
   const handleAddVehicle = () => {
-    navigate('/add-vehicle-search-for-customer');
-  };
+    navigate('/add-vehicle-search-for-customer')
+  }
 
   const handleViewReports = () => {
-    navigate('/reports');
-  };
+    navigate('/reports')
+  }
 
   return (
     <div className="homepage">
+      <Header />
       <div className="header">
         <div className="metrics">
           <div className="metric-box">
             <h3>Available Vehicles</h3>
-            <span className="metric-value">{isLoading ? "Loading..." : metrics.availableVehicles}</span>
+            <span className="metric-value">
+              {isLoading ? 'Loading...' : metrics.availableVehicles}
+            </span>
           </div>
-          <ProtectedElement element={
-            <div className="metric-box">
-              <h3>Pending Parts</h3>
-              <span className="metric-value">{isLoading ? "Loading..." : metrics.pendingParts}</span>
-            </div>
-          }
-            requiredRole={["clerk", "manager"]}
+          <ProtectedElement
+            element={
+              <div className="metric-box">
+                <h3>Pending Parts</h3>
+                <span className="metric-value">
+                  {isLoading ? 'Loading...' : metrics.pendingParts}
+                </span>
+              </div>
+            }
+            requiredRole={['clerk', 'manager']}
           />
         </div>
 
@@ -226,7 +237,7 @@ const HomePage = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
