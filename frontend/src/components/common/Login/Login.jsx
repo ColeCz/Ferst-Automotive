@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       // Create form data as specified in backend API
-      const formDataToSend = new FormData()
+      const formDataToSend = new URLSearchParams()
       formDataToSend.append('username', formData.username)
       formDataToSend.append('password', formData.password)
 
