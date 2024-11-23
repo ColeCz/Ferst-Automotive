@@ -25,13 +25,29 @@ def get():
 
 @blueprint.route("/add", methods=["POST"])
 def add():
-    if not auth.is_logged_in():
-        return {"success": False, "message": "User is not logged in"}
+    # if not auth.is_logged_in():
+    #     return {"success": False, "message": "User is not logged in"}
+
+    vin = request.form.get("vin")
+
+    con = db.get_connection()
+    with con.cursor() as cur:
+        cur.execute(db.get_query('get-parts-cost'),
+                    {
+                        'vehicle_vin': vin,
+                    })
+        parts_cost = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
+    con.commit()
+
+
+    price = request.form.get("price")
+    sale_price = float(price) * 1.25
+    sale_price += parts_cost * 1.1
 
     params = {
-        "trans_price": request.form.get("price"),
+        "trans_price": sale_price,
         "customer": request.form.get("customer"),
-        "vehicle_vin": request.form.get("vin")
+        "vehicle_vin": vin
     }
 
     trans_type = request.form.get("type")
@@ -51,7 +67,7 @@ def add():
 
             query = db.get_query("add-transaction-sale")
             params |= {
-                "salesperson": auth.get_username()
+                "salesperson": auth.get_username(),
             }
         case _:
             return {"success": False, "message": "Unknown transaction type. Valid types: 'PURCHASE', 'SALE'"}
@@ -94,3 +110,31 @@ def delete():
         return {"success": True, "message": None}
     else:
         return {"success": False, "message": f"Transaction with id {trans_id} not found"}
+
+@blueprint.route("/validate-for-sale", methods=["GET"])
+def validate_for_sale():
+    # if not auth.is_logged_in():
+    #     return {"success": False, "message": "User is not logged in"}
+
+    request.args.get("vin")
+    query = db.get_query("validate-for-sale")
+
+    params = {
+        "vin": request.args.get("vin")
+    }
+
+    con = db.get_connection()
+    try:
+        with con.cursor() as cur:
+            cur.execute(query, params)
+            sale_price_valid = cur.fetchone()
+
+            if sale_price_valid:
+                return {"success": True, "message": "Vehicle is for sale"}
+            else:
+                return {"success": False, "message": "Vehicle not for sale"}
+
+        con.commit()
+    except Exception as e:
+        con.rollback()
+        return {"success": False, "message": f"Error: {e}"}

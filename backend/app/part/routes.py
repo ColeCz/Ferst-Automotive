@@ -1,11 +1,15 @@
 import psycopg
 from flask import request, redirect, jsonify
+from app import auth
 from app import db
 from . import blueprint
 
 # successfully tested with POST http://localhost:5000/part/add-parts-order?vehicle_vin=Y033F7MCLW5266860&vendor_name=Opentech
 @blueprint.route("/add-parts-order", methods=['POST'])
 def add_parts_order():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
     vehicle_vin = request.args.get('vehicle_vin')
     vendor_name = request.args.get('vendor_name')
 
@@ -34,6 +38,9 @@ def add_parts_order():
 # successfully tested with POST on http://localhost:5000/part/add-part?vehicle_vin=Y033F7MCLW5266860&order_num=006
 @blueprint.route("/add-part", methods=['POST'])
 def add_part():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
     # get last part order for the vin
     vehicle_vin = request.args.get('vehicle_vin')
     order_num = request.args.get('order_num')
