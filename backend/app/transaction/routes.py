@@ -94,3 +94,31 @@ def delete():
         return {"success": True, "message": None}
     else:
         return {"success": False, "message": f"Transaction with id {trans_id} not found"}
+
+@blueprint.route("/validate-for-sale", methods=["GET"])
+def validate_for_sale():
+    # if not auth.is_logged_in():
+    #     return {"success": False, "message": "User is not logged in"}
+
+    request.args.get("vin")
+    query = db.get_query("validate-for-sale")
+
+    params = {
+        "vin": request.args.get("vin")
+    }
+
+    con = db.get_connection()
+    try:
+        with con.cursor() as cur:
+            cur.execute(query, params)
+            sale_price_valid = cur.fetchone()
+
+            if sale_price_valid:
+                return {"success": True, "message": "Vehicle is for sale"}
+            else:
+                return {"success": False, "message": "Vehicle not for sale"}
+
+        con.commit()
+    except Exception as e:
+        con.rollback()
+        return {"success": False, "message": f"Error: {e}"}
