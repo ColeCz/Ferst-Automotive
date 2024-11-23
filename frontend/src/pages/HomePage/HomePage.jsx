@@ -99,7 +99,7 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <Header />
+      {/* <Header /> */}
       <div className="header">
         <div className="metrics">
           <div className="metric-box">
