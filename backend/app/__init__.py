@@ -8,6 +8,7 @@ import app.transaction
 import app.vehicle
 import app.part
 import app.vendor
+import app.reports
 
 
 def create_app():
@@ -35,5 +36,6 @@ def create_app():
     app.register_blueprint(vehicle.blueprint, url_prefix="/vehicle")
     app.register_blueprint(part.blueprint, url_prefix="/part")
     app.register_blueprint(vendor.blueprint, url_prefix="/vendor")
+    app.register_blueprint(reports.blueprint, url_prefix="/reports")
 
     return app
