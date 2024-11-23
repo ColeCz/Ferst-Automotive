@@ -22,4 +22,4 @@ LEFT OUTER JOIN
 ON
 	s.transactions = t.trans_id
 WHERE
-	t.trans_id = %(trans_id)s
+	t.trans_id = %(trans_id)s;

@@ -39,7 +39,7 @@ def add():
         parts_cost = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
     con.commit()
 
-
+    # Scale the sale price according to the spec
     price = request.form.get("price")
     sale_price = float(price) * 1.25
     sale_price += parts_cost * 1.1
