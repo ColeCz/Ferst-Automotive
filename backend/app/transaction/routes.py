@@ -68,7 +68,6 @@ def add():
             query = db.get_query("add-transaction-sale")
             params |= {
                 "salesperson": auth.get_username(),
-                "salesperson": "owner"
             }
         case _:
             return {"success": False, "message": "Unknown transaction type. Valid types: 'PURCHASE', 'SALE'"}
