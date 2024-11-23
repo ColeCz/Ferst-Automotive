@@ -25,13 +25,29 @@ def get():
 
 @blueprint.route("/add", methods=["POST"])
 def add():
-    if not auth.is_logged_in():
-        return {"success": False, "message": "User is not logged in"}
+    # if not auth.is_logged_in():
+    #     return {"success": False, "message": "User is not logged in"}
+
+    vin = request.form.get("vin")
+
+    con = db.get_connection()
+    with con.cursor() as cur:
+        cur.execute(db.get_query('get-parts-cost'),
+                    {
+                        'vehicle_vin': vin,
+                    })
+        parts_cost = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
+    con.commit()
+
+
+    price = request.form.get("price")
+    sale_price = float(price) * 1.25
+    sale_price += parts_cost * 1.1
 
     params = {
-        "trans_price": request.form.get("price"),
+        "trans_price": sale_price,
         "customer": request.form.get("customer"),
-        "vehicle_vin": request.form.get("vin")
+        "vehicle_vin": vin
     }
 
     trans_type = request.form.get("type")
@@ -52,6 +68,7 @@ def add():
             query = db.get_query("add-transaction-sale")
             params |= {
                 "salesperson": auth.get_username()
+                "salesperson": "owner"
             }
         case _:
             return {"success": False, "message": "Unknown transaction type. Valid types: 'PURCHASE', 'SALE'"}
