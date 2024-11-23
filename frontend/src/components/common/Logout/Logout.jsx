@@ -9,11 +9,11 @@ const Logout = () => {
       try {
         const response = await fetch('http://localhost:8081/api/auth/logout', {
           method: 'POST',
-          credentials: 'include'
+          credentials: 'include',
         })
-        
+
         const data = await response.json()
-        
+
         if (data.success) {
           navigate('/login')
         }

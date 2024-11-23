@@ -4,11 +4,12 @@ from app.reports import blueprint
 import logging
 
 # Database connection parameters
-DB_HOST = 'db'
-DB_PORT = '5432'
-DB_NAME = 'dealership'
-DB_USER = 'dealership'
-DB_PASSWORD = 'dealership'
+DB_HOST = "db"
+DB_PORT = "5432"
+DB_NAME = "dealership"
+DB_USER = "dealership"
+DB_PASSWORD = "dealership"
+
 
 # Utility function to execute SQL queries and return results
 def execute_query(query, params=None):
@@ -19,7 +20,7 @@ def execute_query(query, params=None):
             port=DB_PORT,
             dbname=DB_NAME,
             user=DB_USER,
-            password=DB_PASSWORD
+            password=DB_PASSWORD,
         ) as con:
             with con.cursor() as cur:
                 # Execute the provided query with parameters
@@ -39,32 +40,66 @@ def execute_query(query, params=None):
         logging.error(f"Error executing query: {e}")
         return {"error": str(e)}
 
+
 # Route for the 'Seller History' report
-@blueprint.route("/seller-history", methods=['GET'])
+@blueprint.route("/seller-history", methods=["GET"])
 def seller_history():
-    with open('app/db/queries/report-seller-history.sql', 'r') as file:
-        query = file.read()
+    try:
+        with open("app/db/queries/report-seller-history.sql", "r") as file:
+            query = file.read()
 
-    result = execute_query(query)
+        result = execute_query(query)
 
-    if isinstance(result, dict) and "error" in result:
-        return jsonify(result), 500
+        # debug log the raw result
+        logging.info("Raw seller history result:")
+        for row in result:
+            logging.info(row)
 
-    if result:
-        return jsonify(result)
-    else:
-        return jsonify({"message": "No seller history data found"}), 404
+        if isinstance(result, dict) and "error" in result:
+            return jsonify(result), 500
+
+        # transform None/NULL vals to 0/false for consistent frontend display (otherwise they're just empty - we can vote on this later if need be)
+        for row in result:
+            try:
+                row["total_vehicles_sold"] = int(row.get("total_vehicles_sold", 0) or 0)
+                row["avg_purchase_price"] = float(row.get("avg_purchase_price", 0) or 0)
+                row["cost_per_vehicle"] = float(row.get("cost_per_vehicle", 0) or 0)
+                row["flagged"] = bool(row.get("flagged", False))
+
+                # debug log each transformed row
+                logging.info(f"Transformed row: {row}")
+
+            except (ValueError, TypeError) as e:
+                logging.error(f"Error transforming row {row}: {e}")
+                # if conversion fails, set to 0
+                if "avg_purchase_price" not in row or row["avg_purchase_price"] is None:
+                    row["avg_purchase_price"] = 0.0
+                if "cost_per_vehicle" not in row or row["cost_per_vehicle"] is None:
+                    row["cost_per_vehicle"] = 0.0
+
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({"message": "No seller history data found"}), 404
+
+    except Exception as e:
+        logging.error(f"Error in seller history: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 # Route for the 'Monthly Sales' report
-@blueprint.route("/monthly-sales", methods=['GET'])
+@blueprint.route("/monthly-sales", methods=["GET"])
 def monthly_sales():
     # Get the month and year from query parameters
-    month = request.args.get('month')
-    year = request.args.get('year')
+    month = request.args.get("month")
+    year = request.args.get("year")
 
     # Check if month and year are provided
     if not month or not year:
-        return jsonify({"error": "Month and year are required as query parameters"}), 400
+        return (
+            jsonify({"error": "Month and year are required as query parameters"}),
+            400,
+        )
 
     try:
         # SQL query for monthly sales
@@ -98,7 +133,12 @@ def monthly_sales():
         if result:
             return jsonify(result)
         else:
-            return jsonify({"message": "No sales data found for the specified month and year"}), 404
+            return (
+                jsonify(
+                    {"message": "No sales data found for the specified month and year"}
+                ),
+                404,
+            )
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
@@ -106,9 +146,9 @@ def monthly_sales():
 
 
 # Route for the 'Average Time in Inventory' report
-@blueprint.route("/average-time-in-inventory", methods=['GET'])
+@blueprint.route("/average-time-in-inventory", methods=["GET"])
 def average_time_in_inventory():
-    with open('app/db/queries/report-inventory-time.sql', 'r') as file:
+    with open("app/db/queries/report-inventory-time.sql", "r") as file:
         query = file.read()
 
     result = execute_query(query)
@@ -121,11 +161,12 @@ def average_time_in_inventory():
     else:
         return jsonify({"message": "No average time in inventory data found"}), 404
 
+
 # Route for the 'Price Per Condition' report
-@blueprint.route("/price-per-condition", methods=['GET'])
+@blueprint.route("/price-per-condition", methods=["GET"])
 def price_per_condition():
     try:
-        with open('app/db/queries/report-price-per-condition.sql', 'r') as file:
+        with open("app/db/queries/report-price-per-condition.sql", "r") as file:
             query = file.read()
 
         result = execute_query(query)
@@ -147,10 +188,10 @@ def price_per_condition():
 
 
 # Route for the 'Parts Statistics' report
-@blueprint.route("/parts-statistics", methods=['GET'])
+@blueprint.route("/parts-statistics", methods=["GET"])
 def parts_statistics():
     try:
-        with open('app/db/queries/report-parts-statistics.sql', 'r') as file:
+        with open("app/db/queries/report-parts-statistics.sql", "r") as file:
             query = file.read()
 
         result = execute_query(query)
@@ -169,13 +210,14 @@ def parts_statistics():
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
         return jsonify({"error": str(e)}), 500
-    
-@blueprint.route("/monthly-sales-drilldown", methods=['GET'])
+
+
+@blueprint.route("/monthly-sales-drilldown", methods=["GET"])
 def monthly_sales_drilldown():
     # Get the month and year from the request parameters
-    month = request.args.get('month')
-    year = request.args.get('year')
-    
+    month = request.args.get("month")
+    year = request.args.get("year")
+
     if not month or not year:
         return jsonify({"error": "Month and year are required"}), 400
 
@@ -194,7 +236,7 @@ def monthly_sales_drilldown():
     """
 
     # Use the execute_query function to fetch results
-    result = execute_query(query, {'month': month, 'year': year})
+    result = execute_query(query, {"month": month, "year": year})
 
     if isinstance(result, dict) and "error" in result:
         # Handle error if occurred in execute_query

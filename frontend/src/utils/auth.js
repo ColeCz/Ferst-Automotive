@@ -3,9 +3,9 @@
 export const checkUserRole = async () => {
   try {
     const response = await fetch('/api/auth/session', {
-      credentials: 'include'
+      credentials: 'include',
     })
-    
+
     if (!response.ok) {
       return null
     }
@@ -13,7 +13,7 @@ export const checkUserRole = async () => {
     const data = await response.json()
     return {
       username: data.username,
-      roles: data.roles
+      roles: data.roles,
     }
   } catch (error) {
     console.error('Error checking user role:', error)

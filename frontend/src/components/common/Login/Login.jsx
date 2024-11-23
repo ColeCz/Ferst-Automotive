@@ -37,7 +37,7 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: formDataToSend
+        body: formDataToSend,
       })
 
       const data = await response.json()
@@ -80,7 +80,7 @@ const Login = () => {
             <label htmlFor="password">Password</label>
             <div className="password-input-container">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
                 value={formData.password}
@@ -88,20 +88,16 @@ const Login = () => {
                 required
                 autoComplete="current-password"
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="show-password-button"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "Hide Password" : "Show Password"}
+                {showPassword ? 'Hide Password' : 'Show Password'}
               </button>
             </div>
           </div>
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={isLoading}
-          >
+          <button type="submit" className="login-button" disabled={isLoading}>
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>

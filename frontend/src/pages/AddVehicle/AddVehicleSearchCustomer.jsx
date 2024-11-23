@@ -24,14 +24,19 @@ const AddVehicleSearchCustomer = () => {
     businessAddress: '',
     businessPhone: '',
   })
+  const [ssn, setSSN] = useState('')
+  const [taxId, setTaxId] = useState('')
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/api/customers/search?id=${searchId}`)
+      const searchId = ssn || taxId // Use whichever one has a value
+      const idType = ssn ? 'ssn' : 'taxId' // Tell backend which type we're searching with
+      const response = await fetch(
+        `/api/customers/search?${idType}=${searchId}`,
+      )
       const data = await response.json()
       if (data.customer) {
         setCustomerFound(true)
-        // Populate form data based on customer type
         setFormData(data.customer)
         setCustomerType(data.customer.type)
       } else {
