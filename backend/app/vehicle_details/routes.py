@@ -71,21 +71,38 @@ def vehicle_details(vin):
         # Log the SQL query to make sure it's being read correctly
         logging.info(f"SQL Query: {query}")
 
-        # Execute the query with the VIN as a parameter
-        result = execute_query(query, params={'vin': vin})
+        # Execute the query with the VIN as a parameter to fetch vehicle details
+        vehicle_details_result = execute_query(query, params={'vin': vin})
 
         # If the result contains an error, return the error as JSON
-        if isinstance(result, dict) and "error" in result:
-            logging.error(f"Error executing query: {result}")
-            return jsonify(result), 500
+        if isinstance(vehicle_details_result, dict) and "error" in vehicle_details_result:
+            logging.error(f"Error executing vehicle details query: {vehicle_details_result}")
+            return jsonify(vehicle_details_result), 500
+
+        # Execute the parts cost query if the user is a manager, clerk, or owner
+        if user_role in ['manager', 'clerk', 'owner']:  # Including owner here
+            parts_cost_query = 'app/db/queries/get-parts-cost.sql'
+            with open(parts_cost_query, 'r') as file:
+                parts_cost_query_content = file.read()
+
+            parts_cost_result = execute_query(parts_cost_query_content, params={'vehicle_vin': vin})
+
+            # If the result contains an error, return the error as JSON
+            if isinstance(parts_cost_result, dict) and "error" in parts_cost_result:
+                logging.error(f"Error executing parts cost query: {parts_cost_result}")
+                return jsonify(parts_cost_result), 500
+
+            # Add total parts cost to the vehicle details result
+            total_parts_cost = parts_cost_result[0].get('sum', 0)  # Assuming the query returns a field named 'sum'
+            vehicle_details_result[0]['total_parts_cost'] = total_parts_cost
 
         # If no vehicle is found, return a 404 message
-        if not result:
+        if not vehicle_details_result:
             logging.warning(f"No vehicle found for VIN: {vin}")
             return jsonify({"message": "Vehicle not found"}), 404
 
-        # Return the vehicle details as JSON 
-        return jsonify(result[0])  # Return the first result
+        # Return the vehicle details with parts cost as JSON
+        return jsonify(vehicle_details_result[0])  # Return the first result
 
     except FileNotFoundError as e:
         logging.error(f"SQL file not found: {e}")
