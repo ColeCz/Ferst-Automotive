@@ -8,33 +8,36 @@ from . import blueprint
 def search_vendor():
     vendor_search_name = '%' + request.args.get('vendor_search_name') + '%'
 
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            # query the database for matching vendors
-            cur.execute(db.get_query('search-vendor'), {'vendor_search_name': vendor_search_name})
+    con = db.get_connection()
 
-            matching_vendors = cur.fetchall()
+    with con.cursor() as cur:
+        # query the database for matching vendors
+        cur.execute(db.get_query('search-vendor'), {'vendor_search_name': vendor_search_name})
 
-            if not matching_vendors:
-                return {"success": False, "message": "No matching vendors found"}
-            else:
-                return matching_vendors
+        matching_vendors = cur.fetchall()
+
+        if not matching_vendors:
+            return {"success": False, "message": "No matching vendors found"}
+        else:
+            return matching_vendors
 
 # for generally displaying info about the vendor on the frontend
 @blueprint.route("/get", methods=['GET'])
 def get_vendor():
     vendor_name = request.args.get('vendor_name')
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            # query the database for matching vendors
-            cur.execute(db.get_query('get-vendor-details'), {'vendor_name': vendor_name})
 
-            vendor_details = cur.fetchone()
+    con = db.get_connection()
 
-            if not vendor_details:
-                return {"success": False, "message": "Vendor not found"}
-            else:
-                return vendor_details
+    with con.cursor() as cur:
+        # query the database for matching vendors
+        cur.execute(db.get_query('get-vendor-details'), {'vendor_name': vendor_name})
+
+        vendor_details = cur.fetchone()
+
+        if not vendor_details:
+            return {"success": False, "message": "Vendor not found"}
+        else:
+            return vendor_details
 
 @blueprint.route("/add", methods=['POST'])
 def add_vendor():
@@ -44,15 +47,17 @@ def add_vendor():
     city = request.form.get('city')
     state_abbrv = request.form.get('state_abbrv')
     postal_code = request.form.get('postal_code')
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            cur.execute(db.get_query('add-vendor'),
-                        {
-                            'vendor_name': vendor_name,
-                            'phone_num': phone_num,
-                            'street': street,
-                            'city': city,
-                            'state_abbrv': state_abbrv,
-                            'postal_code': postal_code
-                        })
-            return {"success": True, "message": "Vendor added"}
+
+    con = db.get_connection()
+
+    with con.cursor() as cur:
+        cur.execute(db.get_query('add-vendor'),
+                    {
+                        'vendor_name': vendor_name,
+                        'phone_num': phone_num,
+                        'street': street,
+                        'city': city,
+                        'state_abbrv': state_abbrv,
+                        'postal_code': postal_code
+                    })
+        return {"success": True, "message": "Vendor added"}

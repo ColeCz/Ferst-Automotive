@@ -1,0 +1,31 @@
+.header {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.auth-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.username {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+.auth-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.auth-button:hover {
+  background-color: #e9ecef;
+}

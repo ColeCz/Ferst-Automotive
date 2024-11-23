@@ -14,7 +14,13 @@ AND (COALESCE(%(manufacturer)s, '') = '' OR v.manufacturer = %(manufacturer)s)
 AND (COALESCE(%(year)s, '') = '' OR v.model_year = %(year)s)
 AND (COALESCE(%(fuel_type)s, '') = '' OR v.fuel_type = %(fuel_type)s)
 AND (COALESCE(%(vin)s, '') = '' OR v.vin = %(vin)s)
-AND (COALESCE(%(input)s, '') = '' OR v.description ILIKE %(input)s)     -- changed to match parameter name in other file
+AND (COALESCE(%(keyword)s, '') = '' OR v.description ILIKE %(keyword)s) 
+AND (COALESCE(%(color)s, '') = '' OR EXISTS (
+    SELECT 1
+    FROM Color c_sub
+    WHERE c_sub.vin = v.vin AND c_sub.color_name = %(color)s
+))
 GROUP BY v.vin, v.vehicle_type, v.model_name, v.model_year, 
          v.manufacturer, v.fuel_type, v.horsepower, v.description,
-         t.trans_id, t.trans_date, t.trans_price;
+         t.trans_id, t.trans_date, t.trans_price
+ORDER BY v.vin ASC;

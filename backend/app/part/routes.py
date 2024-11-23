@@ -9,24 +9,27 @@ def add_parts_order():
     vehicle_vin = request.args.get('vehicle_vin')
     vendor_name = request.args.get('vendor_name')
 
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            cur.execute(db.get_query('get-last-order-number'),
-                        {
-                            'vehicle_vin': vehicle_vin,
-                        })
-            last_order_number = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
-            order_num = last_order_number + 1
-            order_num_str = str(order_num).zfill(3)         # convert int back to format "008"
+    con = db.get_connection()
 
-            cur.execute(db.get_query('add-parts-order'),
-                        {
-                            'order_num': order_num_str,
-                            'vehicle_vin': vehicle_vin,
-                            'vendor_name': vendor_name
-                        })
+    with con.cursor() as cur:
+        cur.execute(db.get_query('get-last-order-number'),
+                    {
+                        'vehicle_vin': vehicle_vin,
+                    })
+        last_order_number = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
+        order_num = last_order_number + 1
+        order_num_str = str(order_num).zfill(3)         # convert int back to format "008"
 
-            return jsonify({"success": True, "vehicle_vin": vehicle_vin, "order_num": order_num})
+        cur.execute(db.get_query('add-parts-order'),
+                    {
+                        'order_num': order_num_str,
+                        'vehicle_vin': vehicle_vin,
+                        'vendor_name': vendor_name
+                    })
+
+    con.commit()
+
+    return {"success": True, "vehicle_vin": vehicle_vin, "order_num": order_num}
 
 # successfully tested with POST on http://localhost:5000/part/add-part?vehicle_vin=Y033F7MCLW5266860&order_num=006
 @blueprint.route("/add-part", methods=['POST'])
@@ -40,18 +43,21 @@ def add_part():
     part_description = request.form.get('part_description')
     quantity = request.form.get('quantity')
 
-    with psycopg.connect(db.get_connection_info()) as con:
-        with con.cursor() as cur:
-            cur.execute(db.get_query('add-part'),
-                        {
-                            'part_number': part_number,
-                            'vehicle_vin': vehicle_vin,
-                            'order_num': order_num,
-                            'unit_price': unit_price,
-                            'part_description': part_description,
-                            'quantity': quantity
-                        })
+    con = db.get_connection()
 
-            return jsonify({'success': True})
+    with con.cursor() as cur:
+        cur.execute(db.get_query('add-part'),
+                    {
+                        'part_number': part_number,
+                        'vehicle_vin': vehicle_vin,
+                        'order_num': order_num,
+                        'unit_price': unit_price,
+                        'part_description': part_description,
+                        'quantity': quantity
+                    })
+
+    con.commit()
+
+    return {'success': True}
 
 
