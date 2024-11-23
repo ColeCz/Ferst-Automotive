@@ -3,7 +3,7 @@
 // ProtectedRoute is a custom component in its own folder that restricts user page access by roles.
 
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 
 // Components:
 import Login from './components/common/Login/Login'
@@ -20,11 +20,17 @@ import NewPart from './pages/AddPart/NewPart'
 import AddVehicleSearchCustomer from './pages/AddVehicle/AddVehicleSearchCustomer'
 import VehicleForm from './pages/AddVehicle/VehicleForm'
 
+// To stop Header.jsx from rendering on '/login' page
+const HeaderWrapper = () => {
+  const location = useLocation()
+  return location.pathname === '/login' ? null : <Header />
+}
+
 function App() {
   return (
     <Router>
       <div>
-      <Header />
+      <HeaderWrapper />
       <Routes>
         <Route path='/login' element={<Login />}></Route>
         {/* Main routes */}
