@@ -13,11 +13,21 @@ const ProtectedElement = ({
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const response = await fetch('/api/auth/session') // needs to match backend API path
+        const response = await fetch('http://localhost:8081/auth/session') // needs to match backend API path
+        if (!response.ok) {
+          throw new Error('Failed to fetch session')
+        }
         const data = await response.json()
         setUserRoles(data.roles)
       } catch (error) {
         console.error('Error fetching session:', error)
+        // set all to false in case of error:
+        setUserRoles({
+          clerk: false,
+          salesperson: false,
+          manager: false,
+          owner: false
+        })
       } finally {
         setIsLoading(false)
       }

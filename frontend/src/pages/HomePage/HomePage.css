@@ -105,3 +105,27 @@
 .radio-group input[type="radio"] {
   cursor: pointer;
 }
+.filter-section {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+.filter-heading {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+.filter-radio-group {
+  display: flex;
+  gap: 20px;
+}
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.filter-option input[type="radio"] {
+  cursor: pointer;
+}
