@@ -1,11 +1,15 @@
 import psycopg
 from flask import request, redirect, jsonify
+from app import auth
 from app import db
 from . import blueprint
 
 # searches for and returns a list of matching vendors using wildcards
 @blueprint.route("/search", methods=['GET'])
 def search_vendor():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
     vendor_search_name = '%' + request.args.get('vendor_search_name') + '%'
 
     con = db.get_connection()
@@ -24,6 +28,9 @@ def search_vendor():
 # for generally displaying info about the vendor on the frontend
 @blueprint.route("/get", methods=['GET'])
 def get_vendor():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
     vendor_name = request.args.get('vendor_name')
 
     con = db.get_connection()
@@ -41,6 +48,9 @@ def get_vendor():
 
 @blueprint.route("/add", methods=['POST'])
 def add_vendor():
+    if not auth.is_logged_in():
+        return {"success": False, "message": "User is not logged in"}
+
     vendor_name = request.form.get('vendor_name')
     phone_num = request.form.get('phone_num')
     street = request.form.get('street')
