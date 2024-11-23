@@ -11,7 +11,7 @@ const Header = () => {
     const checkAuth = async () => {
       try {
         const response = await fetch('http://localhost:8081/auth/session', {
-          credentials: 'include'
+          credentials: 'include',
         })
         const data = await response.json()
         setIsAuthenticated(!!data.username)
@@ -30,11 +30,11 @@ const Header = () => {
     try {
       const response = await fetch('http://localhost:8081/auth/logout', {
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
       })
-      
+
       const data = await response.json()
-      
+
       if (data.success) {
         setIsAuthenticated(false)
         setUsername('')
@@ -56,7 +56,10 @@ const Header = () => {
         ) : (
           <div className="auth-container">
             <span className="username">
-              Current User: <span style={{ color: '#0056b3', fontWeight: 'bold' }}>{username}</span>
+              Current User:{' '}
+              <span style={{ color: '#0056b3', fontWeight: 'bold' }}>
+                {username}
+              </span>
             </span>
             <button onClick={handleLogout} className="auth-button">
               Logout

@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     const fetchSession = async () => {
       try {
         const response = await fetch('http://localhost:8081/auth/session', {
-          credentials: 'include'
+          credentials: 'include',
         })
         const data = await response.json()
         setUserRoles(data.roles)

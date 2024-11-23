@@ -26,7 +26,7 @@ const ProtectedElement = ({
           clerk: false,
           salesperson: false,
           manager: false,
-          owner: false
+          owner: false,
         })
       } finally {
         setIsLoading(false)

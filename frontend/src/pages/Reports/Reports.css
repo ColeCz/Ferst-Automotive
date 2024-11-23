@@ -32,3 +32,74 @@
 .report-content {
   white-space: pre-wrap;
 }
+.reports-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.reports-menu {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.report-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.report-button.selected {
+  background-color: #007bff;
+  color: white;
+}
+.report-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.date-filters {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.date-filters select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.report-table th,
+.report-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.report-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+.report-table tr:hover {
+  background-color: #f5f5f5;
+}
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+.report-content {
+  overflow-x: auto;
+}

@@ -3,7 +3,12 @@
 // ProtectedRoute is a custom component in its own folder that restricts user page access by roles.
 
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom'
 
 // Components:
 import Login from './components/common/Login/Login'
@@ -30,43 +35,43 @@ function App() {
   return (
     <Router>
       <div>
-      <HeaderWrapper />
-      <Routes>
-        <Route path='/login' element={<Login />}></Route>
-        {/* Main routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route 
-          path="/reports" 
-          element={
-            <ProtectedRoute requiredRole="manager">
-              <Reports />
-            </ProtectedRoute>
-          } 
-        />
-        <Route path="/details/:vehicleId" element={<VehicleDetails />} />
+        <HeaderWrapper />
+        <Routes>
+          <Route path="/login" element={<Login />}></Route>
+          {/* Main routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/details/:vehicleId" element={<VehicleDetails />} />
 
-        {/* Sell vehicle flow */}
-        <Route 
-          path="/sell-vehicle-search-customer" 
-          element={<SellVehicleSearchCustomer />} 
-        />
-        <Route path="/sell-car-confirm" element={<ConfirmSale />} />
+          {/* Sell vehicle flow */}
+          <Route
+            path="/sell-vehicle-search-customer"
+            element={<SellVehicleSearchCustomer />}
+          />
+          <Route path="/sell-car-confirm" element={<ConfirmSale />} />
 
-        {/* Add part flow */}
-        <Route path="/add-part-search-vendor" element={<SearchVendor />} />
-        <Route path="/add-part-new-part" element={<NewPart />} />
+          {/* Add part flow */}
+          <Route path="/add-part-search-vendor" element={<SearchVendor />} />
+          <Route path="/add-part-new-part" element={<NewPart />} />
 
-        {/* Add vehicle flow */}
-        <Route 
-          path="/add-vehicle-search-for-customer" 
-          element={
-            <ProtectedRoute requiredRole="clerk">
-              <AddVehicleSearchCustomer />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/add-vehicle-form" element={<VehicleForm />} />
-      </Routes>
+          {/* Add vehicle flow */}
+          <Route
+            path="/add-vehicle-search-for-customer"
+            element={
+              <ProtectedRoute requiredRole="clerk">
+                <AddVehicleSearchCustomer />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/add-vehicle-form" element={<VehicleForm />} />
+        </Routes>
       </div>
     </Router>
   )

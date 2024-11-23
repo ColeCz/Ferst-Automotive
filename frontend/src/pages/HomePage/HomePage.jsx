@@ -52,13 +52,13 @@ const HomePage = () => {
 
       // extract nums from the nested arrays returned by the API
       const availableCount = data.available_vehicles_count?.[0]?.[0] || 0
-      const pendingCount = data.vehicles_awaiting_parts_count ? 
-                        data.vehicles_awaiting_parts_count[0][0] : 0
-
+      const pendingCount = data.vehicles_awaiting_parts_count
+        ? data.vehicles_awaiting_parts_count[0][0]
+        : 0
 
       setMetrics({
-        availableVehicles: availableCount,  // 217
-        pendingParts: pendingCount,         // 83
+        availableVehicles: availableCount, // 217
+        pendingParts: pendingCount, // 83
       })
     } catch (error) {
       console.error('Error fetching metrics:', error)
@@ -77,14 +77,14 @@ const HomePage = () => {
     try {
       console.log('Fetching session...')
       const response = await fetch('http://localhost:8081/auth/session', {
-        credentials: 'include'
+        credentials: 'include',
       })
       if (!response.ok) {
         throw new Error('Failed to fetch session')
       }
       const data = await response.json()
       console.log('Session response:', data)
-      
+
       if (data.roles) {
         console.log('Setting user roles to:', data.roles)
         setUserRoles(data.roles)
@@ -112,13 +112,12 @@ const HomePage = () => {
     // Implement search functionality w/ filter
   }
 
-  
-
   const handleAddVehicle = () => {
     // Log the current state when button is clicked
     console.log('Current userRoles when clicking:', userRoles)
-    
-    if (userRoles?.clerk) {  // Added optional chaining for safety
+
+    if (userRoles?.clerk) {
+      // Added optional chaining for safety
       navigate('/add-vehicle-search-for-customer')
     } else {
       console.log('Not a clerk, roles:', userRoles)
@@ -210,45 +209,45 @@ const HomePage = () => {
       </div>
 
       <div className="action-buttons">
-      <ProtectedElement
-  element={
-    <div className="filter-section">
-      <h3 className="filter-heading">Filter Search Results By:</h3>
-      <div className="filter-radio-group">
-        <label className="filter-option">
-          <input
-            type="radio"
-            name="filter"
-            value="all"
-            checked={filterSelection === 'all'}
-            onChange={(e) => setFilterSelection(e.target.value)}
-          />
-          All Vehicles
-        </label>
-        <label className="filter-option">
-          <input
-            type="radio"
-            name="filter"
-            value="sold"
-            checked={filterSelection === 'sold'}
-            onChange={(e) => setFilterSelection(e.target.value)}
-          />
-          Sold Vehicles
-        </label>
-        <label className="filter-option">
-          <input
-            type="radio"
-            name="filter"
-            value="unsold"
-            checked={filterSelection === 'unsold'}
-            onChange={(e) => setFilterSelection(e.target.value)}
-          />
-          Unsold Vehicles
-        </label>
-      </div>
-    </div>
-  }
-  requiredRole="manager"
+        <ProtectedElement
+          element={
+            <div className="filter-section">
+              <h3 className="filter-heading">Filter Search Results By:</h3>
+              <div className="filter-radio-group">
+                <label className="filter-option">
+                  <input
+                    type="radio"
+                    name="filter"
+                    value="all"
+                    checked={filterSelection === 'all'}
+                    onChange={(e) => setFilterSelection(e.target.value)}
+                  />
+                  All Vehicles
+                </label>
+                <label className="filter-option">
+                  <input
+                    type="radio"
+                    name="filter"
+                    value="sold"
+                    checked={filterSelection === 'sold'}
+                    onChange={(e) => setFilterSelection(e.target.value)}
+                  />
+                  Sold Vehicles
+                </label>
+                <label className="filter-option">
+                  <input
+                    type="radio"
+                    name="filter"
+                    value="unsold"
+                    checked={filterSelection === 'unsold'}
+                    onChange={(e) => setFilterSelection(e.target.value)}
+                  />
+                  Unsold Vehicles
+                </label>
+              </div>
+            </div>
+          }
+          requiredRole="manager"
         />
 
         <ProtectedElement
