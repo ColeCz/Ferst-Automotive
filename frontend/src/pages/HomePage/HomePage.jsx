@@ -33,17 +33,9 @@ const HomePage = () => {
     fetchSession() // defined below
   }, [])
 
-
-/**
- * 
- * 
- * 
- * Below, fetchMetrics, is the problematic code:
- * 
- * 
- * 
- */
-
+  useEffect(() => {
+    console.log('userRoles changed:', userRoles)
+  }, [userRoles])
 
   // fetch metrics for the top-left two widgets
   const fetchMetrics = async () => {
@@ -83,12 +75,18 @@ const HomePage = () => {
   const fetchSession = async () => {
     // fetches user role from session info
     try {
-      const response = await fetch('http://localhost:8081/auth/session')
+      console.log('Fetching session...')
+      const response = await fetch('http://localhost:8081/auth/session', {
+        credentials: 'include'
+      })
       if (!response.ok) {
         throw new Error('Failed to fetch session')
       }
       const data = await response.json()
+      console.log('Session response:', data)
+      
       if (data.roles) {
+        console.log('Setting user roles to:', data.roles)
         setUserRoles(data.roles)
       }
     } catch (error) {
@@ -117,7 +115,14 @@ const HomePage = () => {
   
 
   const handleAddVehicle = () => {
-    navigate('/add-vehicle-search-for-customer')
+    // Log the current state when button is clicked
+    console.log('Current userRoles when clicking:', userRoles)
+    
+    if (userRoles?.clerk) {  // Added optional chaining for safety
+      navigate('/add-vehicle-search-for-customer')
+    } else {
+      console.log('Not a clerk, roles:', userRoles)
+    }
   }
 
   const handleViewReports = () => {
