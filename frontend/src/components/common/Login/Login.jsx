@@ -10,12 +10,13 @@ const Login = () => {
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: value.toLowerCase(), // username to lowercase per API spec
+      [name]: value.toLowerCase(), // Username to lowercase per API spec
     }))
   }
 
@@ -30,9 +31,12 @@ const Login = () => {
       formDataToSend.append('username', formData.username)
       formDataToSend.append('password', formData.password)
 
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('http://localhost:8081/auth/login', {
         method: 'POST',
         credentials: 'include', // Needed for session handling
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         body: formDataToSend
       })
 
@@ -74,15 +78,24 @@ const Login = () => {
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              autoComplete="current-password"
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                autoComplete="current-password"
+              />
+              <button 
+                type="button" 
+                className="show-password-button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide Password" : "Show Password"}
+              </button>
+            </div>
           </div>
           <button 
             type="submit" 
