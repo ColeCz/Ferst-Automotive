@@ -38,13 +38,12 @@ with open('vehicles.tsv', 'r', newline='', encoding='utf-8') as f:
         VIN = row['VIN']
         condition = row['condition']
         purchase_date = row['purchase_date']
-        price = row['price']
+        purchase_price = row['price']
         purchased_from_customer = row['purchased_from_customer']
         purchase_clerk = row['purchase_clerk']
         sale_date = row['sale_date']
         sold_to_customer = row['sold_to_customer']
         salesperson = row['salesperson']
-        purchase_price = int(float(price))
         # # Map customer ssn and tid's to a customer id
         # purchased_from_customer = map_customer(purchased_from_customer)
         # sold_to_customer = map_customer(sold_to_customer)

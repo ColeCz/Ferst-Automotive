@@ -19,7 +19,7 @@ SELECT
     
     -- Calculate the average price of transactions for each vehicle type and condition
     -- If no transaction is found, use COALESCE to return 0 as the average price
-    COALESCE(AVG(t.trans_price), 0) AS avg_price
+    COALESCE(ROUND(AVG(t.trans_price), 2), 0) AS avg_price
 
 FROM 
     -- Use the vehicle_type_list (which contains distinct vehicle types) for the vehicle_type

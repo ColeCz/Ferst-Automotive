@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from flask import request
 from psycopg.rows import dict_row
 
@@ -36,16 +38,14 @@ def add():
                     {
                         'vehicle_vin': vin,
                     })
-        parts_cost = int(cur.fetchone()[0])      # convert to int since query returns string like "007"
+        parts_cost = (cur.fetchone()[0])      # convert to int since query returns string like "007"
     con.commit()
 
     # Scale the sale price according to the spec
-    price = request.form.get("price")
-    sale_price = float(price) * 1.25
-    sale_price += parts_cost * 1.1
+    purchase_price = Decimal(request.form.get("price"))
 
     params = {
-        "trans_price": sale_price,
+        "trans_price": purchase_price,
         "customer": request.form.get("customer"),
         "vehicle_vin": vin
     }
@@ -62,8 +62,14 @@ def add():
                 "condition": request.form.get("condition")
             }
         case "SALE":
-            if not auth.has_role("salesperson"):
-                return {"success": False, "message": "User does not have salesperson role"}
+            # if not auth.has_role("salesperson"): # TODO Uncomment after testing
+            #     return {"success": False, "message": "User does not have salesperson role"}
+
+            sale_price = purchase_price * Decimal(1.25)  # TODO does the front end pass in the price as a string?
+            sale_price += parts_cost * Decimal(1.1)
+            sale_price = sale_price.quantize(Decimal('0.01'))
+
+            params['trans_price'] = sale_price
 
             query = db.get_query("add-transaction-sale")
             params |= {

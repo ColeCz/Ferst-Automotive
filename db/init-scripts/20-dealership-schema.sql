@@ -94,7 +94,7 @@ CREATE TABLE Transaction
 (
 	trans_id    SERIAL PRIMARY KEY,
 	trans_date  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	trans_price INTEGER   NOT NULL,
+	trans_price DECIMAL(10,2)   NOT NULL,
 	customer    INTEGER REFERENCES Customer (customer_id),
 	vehicle_vin CHAR(17) REFERENCES Vehicle (vin)
 );
@@ -138,7 +138,7 @@ CREATE TABLE Part
 	order_number     VARCHAR(10)                                                                NOT NULL,
 	part_number      VARCHAR(64)                                                                NOT NULL,
 	current_status   VARCHAR(64) CHECK (current_status IN ('ORDERED', 'RECEIVED', 'INSTALLED')) NOT NULL,
-	unit_price       INTEGER                                                                    NOT NULL,
+	unit_price       DECIMAL(10, 2)                                                             NOT NULL,
 	part_description VARCHAR(300)                                                               NOT NULL,
 	quantity         INTEGER                                                                    NOT NULL,
 	PRIMARY KEY (vehicle_vin, order_number, part_number),
