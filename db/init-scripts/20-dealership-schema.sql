@@ -33,8 +33,10 @@ CREATE TABLE Individual
 
 CREATE TABLE Employee
 (
-	username VARCHAR(64) PRIMARY KEY,
-	pass     VARCHAR(64)
+	username    VARCHAR(64) PRIMARY KEY,
+	pass        VARCHAR(64),
+	firstname   VARCHAR(64)                               NOT NULL,
+	lastname    VARCHAR(64)                               NOT NULL
 );
 
 CREATE TABLE Salesperson
