@@ -93,3 +93,21 @@ def search_vehicles():
         "available_vehicles_count": available_vehicles_count,
         "vehicles_awaiting_parts_count": vehicles_awaiting_parts_count,
     }
+
+# searches business or individual, used by clerks to add vehicles
+@blueprint.route('/search-customers', methods=['GET'])
+def search_customer():
+
+    parameters = {
+        'ssn': request.args.get('ssn'),
+        'tin': request.args.get('tin')
+    }
+
+    if parameters.get('ssn'):
+        customer = query_db('search-individual', parameters)
+    elif parameters.get('tin'):
+        customer = query_db('search-business', parameters)
+    else:
+        return {"error": "Must enter TIN or SSN to search"}
+    
+    return {"customer": customer}
