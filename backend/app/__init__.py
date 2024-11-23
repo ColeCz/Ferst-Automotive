@@ -8,11 +8,23 @@ import app.transaction
 import app.vehicle
 import app.part
 import app.vendor
+import app.reports
 
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(
+        app,
+        supports_credentials=True,  # Enable credentials support (100% necessary for auth)
+        resources={
+            r"/*": {  # Apply to all routes
+                "origins": "http://localhost:8080",  # Frontend origin
+                "allow_credentials": True,
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+    )
 
     db.init_pool(app)
 
@@ -24,5 +36,6 @@ def create_app():
     app.register_blueprint(vehicle.blueprint, url_prefix="/vehicle")
     app.register_blueprint(part.blueprint, url_prefix="/part")
     app.register_blueprint(vendor.blueprint, url_prefix="/vendor")
+    app.register_blueprint(reports.blueprint, url_prefix="/reports")
 
     return app

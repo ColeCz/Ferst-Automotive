@@ -27,7 +27,6 @@ INSERT INTO Employee (username, pass, firstname, lastname) VALUES ('user23', 'pa
 INSERT INTO Employee (username, pass, firstname, lastname) VALUES ('user24', 'pass24', 'Taryn', 'Whobrey');
 INSERT INTO Employee (username, pass, firstname, lastname) VALUES ('user25', 'pass25', 'Mari', 'Mcrae');
 
-
 INSERT INTO Salesperson (username) VALUES ('owner');
 INSERT INTO Salesperson (username) VALUES ('user03');
 INSERT INTO Salesperson (username) VALUES ('user04');

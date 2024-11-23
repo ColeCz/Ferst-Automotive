@@ -1,20 +1,47 @@
-– Get base stats for each vehicle type & condition
-WITH price_stats AS (
-	SELECT
-v.vehicle_type, p.condition, ROUND(AVG(t.trans_price) AS avg_price
-FROM Vehicle v
-JOIN Transactions t ON v.vin = t.vehicle_vin
-JOIN Purchase p ON t.trans_id = p.transactions
-GROUP BY v.vehicle_type, p.condition
+-- Define a list of conditions to ensure all possible conditions are included in the result
+WITH condition_list AS (
+    -- The unnest function creates a list of conditions: 'Excellent', 'Very Good', 'Good', 'Fair'
+    SELECT unnest(ARRAY['Excellent', 'Very Good', 'Good', 'Fair']) AS condition
+),
+-- Define a list of distinct vehicle types from the vehicle table
+vehicle_type_list AS (
+    -- Retrieve distinct vehicle types from the vehicle table
+    SELECT DISTINCT vehicle_type FROM public.vehicle
 )
 
--- Create pivoted report (using COALESCE to return 0 in cases where there may be NULL values)
-SELECT
-vehicle_type,
-COALESCE(MAX(CASE WHEN condition = 'Excellent' THEN avg_price END), 0) AS excellend_condition,
-COALESCE(MAX(CASE WHEN condition = 'Very Good' THEN avg_price END), 0) AS very_good_condition,
-COALESCE(MAX(CASE WHEN condition = 'Good' THEN avg_price END), 0) as good_condition,
-COALESCE(MAX(CASE WHEN condition = 'Fair' THEN avg_price END), 0) as fair_condition
-FROM price_stats
-GROUP BY vehicle_type
-ORDER BY vehicle_type;
+-- Main query to calculate the average price per vehicle type and condition
+SELECT 
+    -- Select the vehicle type from the vehicle_type_list
+    v.vehicle_type, 
+    
+    -- Select the condition from the condition_list
+    c.condition,
+    
+    -- Calculate the average price of transactions for each vehicle type and condition
+    -- If no transaction is found, use COALESCE to return 0 as the average price
+    COALESCE(AVG(t.trans_price), 0) AS avg_price
+
+FROM 
+    -- Use the vehicle_type_list (which contains distinct vehicle types) for the vehicle_type
+    vehicle_type_list v
+
+-- Use CROSS JOIN to combine each vehicle type with every condition
+-- This ensures that all combinations of vehicle types and conditions are considered
+CROSS JOIN 
+    condition_list c
+
+-- Left join to the transaction table to get transaction data for each vehicle
+LEFT JOIN 
+    public.transaction t ON t.vehicle_vin IN (SELECT vin FROM public.vehicle WHERE vehicle_type = v.vehicle_type)
+
+-- Left join to the purchase table to get the purchase details matching both transaction ID and condition
+LEFT JOIN 
+    public.purchase p ON p.transactions = t.trans_id AND p.condition = c.condition
+
+-- Group the results by vehicle type and condition to calculate the average price for each combination
+GROUP BY 
+    v.vehicle_type, c.condition
+
+-- Order the results by vehicle type and condition for better readability
+ORDER BY 
+    v.vehicle_type, c.condition;

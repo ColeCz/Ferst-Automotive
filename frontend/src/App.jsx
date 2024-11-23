@@ -5,11 +5,12 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-// If confused about some component/page names, try looking at paths:
-// Ex: To sell a vehicle, we must first search a customer.
+// Components:
 import Login from './components/common/Login/Login'
 import HomePage from './pages/HomePage/HomePage'
 import ProtectedRoute from './components/common/ProtectedRoute/ProtectedRoute'
+import Header from './components/common/Header/Header'
+// Pages:
 import Reports from './pages/Reports/Reports'
 import VehicleDetails from './pages/VehicleDetails/VehicleDetails'
 import SellVehicleSearchCustomer from './pages/SellVehicle/SellVehicleSearchCustomer'
@@ -22,6 +23,8 @@ import VehicleForm from './pages/AddVehicle/VehicleForm'
 function App() {
   return (
     <Router>
+      <div>
+      <Header />
       <Routes>
         <Route path='/login' element={<Login />}></Route>
         {/* Main routes */}
@@ -58,6 +61,7 @@ function App() {
         />
         <Route path="/add-vehicle-form" element={<VehicleForm />} />
       </Routes>
+      </div>
     </Router>
   )
 }

@@ -10,7 +10,7 @@ const Header = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/session', {
+        const response = await fetch('http://localhost:8081/auth/session', {
           credentials: 'include'
         })
         const data = await response.json()
@@ -28,7 +28,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch('http://localhost:8081/auth/logout', {
         method: 'POST',
         credentials: 'include'
       })
@@ -55,7 +55,9 @@ const Header = () => {
           </button>
         ) : (
           <div className="auth-container">
-            <span className="username">Welcome, {username}</span>
+            <span className="username">
+              Current User: <span style={{ color: '#0056b3', fontWeight: 'bold' }}>{username}</span>
+            </span>
             <button onClick={handleLogout} className="auth-button">
               Logout
             </button>
