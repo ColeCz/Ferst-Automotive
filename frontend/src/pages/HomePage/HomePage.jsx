@@ -142,7 +142,7 @@ const HomePage = () => {
           <ProtectedElement
             element={
               <div className="metric-box">
-                <h3>Pending Parts</h3>
+                <h3>Vehicles with Pending Parts</h3>
                 <span className="metric-value">
                   {isLoading ? 'Loading...' : metrics.pendingParts}
                 </span>

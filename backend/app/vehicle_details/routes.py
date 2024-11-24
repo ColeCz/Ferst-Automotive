@@ -45,18 +45,17 @@ def execute_query(query, params=None):
         logging.error(f"Error executing query: {e}")
         return {"error": str(e)}
 
-# Route to fetch vehicle details based on the VIN (vehicle_id)
 @blueprint.route('/get-vehicle-details/<vin>', methods=['GET'])
 def vehicle_details(vin):
-   # Determine the user's role from the request arguments
+    # Determine the user's role from the request arguments
     user_role = request.args.get('role', 'public')  # Default to 'public' if no role is provided
 
     # Step 4: Adjust role logic for the owner
     if user_role == 'owner':
         user_role = 'manager'  # Treat the owner as having manager-level access
 
-    # Log the received VIN and role for debugging
-    logging.info(f"Received VIN: {vin} and Role: {user_role}")
+    # Log the received VIN and adjusted role for debugging
+    logging.info(f"Received VIN: {vin} and adjusted Role: {user_role}")
 
     # Map roles to their respective SQL query files
     query_paths = {
@@ -65,24 +64,24 @@ def vehicle_details(vin):
         'public': 'app/db/queries/get-vehicle-details.sql'  # Default for public users
     }
 
-    # Select the appropriate query file based on the role
-    query_path = query_paths.get(user_role, query_paths['public'])  # Default to 'public' if role is not found
+    # Select the appropriate query file based on the adjusted role
+    query_path = query_paths.get(user_role, query_paths['public'])
 
     try:
         # Read the SQL query from the file
         with open(query_path, 'r') as file:
             query = file.read()
 
-        # Log the SQL query to make sure it's being read correctly
+        # Log the SQL query for debugging
         logging.info(f"SQL Query: {query}")
 
         # Prepare parameters as a dictionary for named placeholders
         params = {'vin': vin}  # Using named placeholder "vin"
 
         # Execute the query with the VIN as a parameter to fetch vehicle details
-        vehicle_details_result = execute_query(query, params=params)  # Pass params as dictionary
+        vehicle_details_result = execute_query(query, params=params)
 
-        # If the result contains an error, return the error as JSON
+        # Handle any errors returned by execute_query
         if isinstance(vehicle_details_result, dict) and "error" in vehicle_details_result:
             logging.error(f"Error executing vehicle details query: {vehicle_details_result}")
             return jsonify(vehicle_details_result), 500
