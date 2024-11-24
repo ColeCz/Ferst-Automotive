@@ -61,6 +61,7 @@ def vehicle_details(vin):
     query_paths = {
         'manager': 'app/db/queries/get-vehicle-details-manager.sql',
         'owner': 'app/db/queries/get-vehicle-details-manager.sql',  # Owner uses manager query
+        'clerk': 'app/db/queries/get-vehicle-details-clerk.sql',  
         'public': 'app/db/queries/get-vehicle-details.sql'  # Default for public users
     }
 
