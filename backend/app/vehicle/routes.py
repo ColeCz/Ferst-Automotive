@@ -161,3 +161,39 @@ def add_customer():
 
     except Exception as e:
         return {"error": str(e)}        
+
+
+@blueprint.route('/add-vehicle', methods=['POST'])
+def add_vehicle():
+
+    parameters = {
+        'vin': request.form.get('vin'),
+        'vehicle_type': request.form.get('vehicle_type'),
+        'model_name': request.form.get('model_name'),
+        'model_year': request.form.get('model_year'),
+        'manufacturer': request.form.get('manufacturer'),
+        'fuel_type': request.form.get('fuel_type'),
+        'horsepower': request.form.get('horsepower'),
+        'description': request.form.get('description'),
+
+        'customer': request.form.get('customer_id'),  
+        'trans_price': request.form.get('trans_price'),
+        'condition': request.form.get('condition'),
+        'clerk': auth.get_username() 
+    }
+
+    for key, value in parameters.items():
+        if value is None:
+            return {"error": f"missing required field: {key}"}
+    
+    conn = db.get_connection()
+    try:
+        with conn.cursor() as cur:
+            vehicle_query = db.get_query('add-vehicle')
+            cur.execute(vehicle_query, parameters)
+            purchase_query = db.get_query('add-transaction-purchase')
+            cur.execute(purchase_query, parameters)
+            conn.commit()
+        return {"message": "vehicle purchased successfully"}
+    except Exception as e:
+        return {"error": str(e)}  
