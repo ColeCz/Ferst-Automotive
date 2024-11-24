@@ -47,9 +47,6 @@ const HomePage = () => {
       }
       const data = await response.json()
 
-      console.log('Full response data:', data)
-      console.log('Parts count raw value:', data.vehicles_awaiting_parts_count)
-
       // extract nums from the nested arrays returned by the API
       const availableCount = data.available_vehicles_count?.[0]?.[0] || 0
       const pendingCount = data.vehicles_awaiting_parts_count

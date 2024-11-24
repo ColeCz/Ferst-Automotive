@@ -58,3 +58,14 @@ input {
 .submit-button:hover {
   background-color: #218838;
 }
+.search-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.search-section {
+  display: flex;
+  gap: 1rem;
+}

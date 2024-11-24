@@ -13,7 +13,9 @@ const ProtectedElement = ({
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const response = await fetch('http://localhost:8081/auth/session') // needs to match backend API path
+        const response = await fetch('http://localhost:8081/auth/session', {
+          credentials: 'include'  // Add this
+        })
         if (!response.ok) {
           throw new Error('Failed to fetch session')
         }
@@ -38,6 +40,11 @@ const ProtectedElement = ({
 
   if (isLoading) {
     return null // loading spinner, but only if we have time later
+  }
+
+  // check if user's an owner first (since it contains multiple roles)
+  if (userRoles && userRoles.owner) {
+    return Element
   }
 
   // handle both single role & arrays of roles

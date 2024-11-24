@@ -15,8 +15,10 @@ const ProtectedRoute = ({ children, requiredRole }) => {
         })
         const data = await response.json()
         setUserRoles(data.roles)
-        if (!data.roles[requiredRole]) {
-          navigate('/login') // when not auth'd, redirects to '/login'
+
+        // check if user is owner first
+        if (!data.roles.owner && !data.roles[requiredRole]) {
+          navigate('/login') // if not, user gets sent back to login page
         }
       } catch (error) {
         console.error('Error fetching session:', error)
@@ -33,7 +35,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <div>Loading...</div>
   }
 
-  return userRoles && userRoles[requiredRole] ? children : null
+  //updated to return children if user has required role or if they have owner role
+  return (userRoles && (userRoles.owner || userRoles[requiredRole])) ? children : null
 }
 
 export default ProtectedRoute

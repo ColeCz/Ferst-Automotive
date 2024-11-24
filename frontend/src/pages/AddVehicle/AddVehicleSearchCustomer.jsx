@@ -4,9 +4,10 @@ import './AddVehicleSearchCustomer.css'
 
 const AddVehicleSearchCustomer = () => {
   const navigate = useNavigate()
-  const [searchId, setSearchId] = useState('')
-  const [customerType, setCustomerType] = useState('')
+  const [ssn, setSSN] = useState('')
+  const [taxId, setTaxId] = useState('')
   const [customerFound, setCustomerFound] = useState(false)
+  const [customerType, setCustomerType] = useState('')
   const [formData, setFormData] = useState({
     // Individual fields
     firstName: '',
@@ -24,21 +25,29 @@ const AddVehicleSearchCustomer = () => {
     businessAddress: '',
     businessPhone: '',
   })
-  const [ssn, setSSN] = useState('')
-  const [taxId, setTaxId] = useState('')
 
-  const handleSearch = async () => {
+  const handleSearch = async (type, id) => {
     try {
-      const searchId = ssn || taxId // Use whichever one has a value
-      const idType = ssn ? 'ssn' : 'taxId' // Tell backend which type we're searching with
-      const response = await fetch(
-        `/api/customers/search?${idType}=${searchId}`,
-      )
+      const idType = type === 'individual' ? 'ssn' : 'tin'
+      const searchParams = new URLSearchParams()
+      searchParams.append(idType, id)
+
+      console.log('Searching with params:', searchParams.toString())  // Debug
+
+      const response = await fetch(`http://localhost:8081/vehicle/search-customers?${searchParams.toString()}`, {
+        credentials: 'include',
+      })
+
+      console.log('Response:', response)  // Debug
+
       const data = await response.json()
+  
+      console.log('Data:', data)  // Debug
+
       if (data.customer) {
         setCustomerFound(true)
         setFormData(data.customer)
-        setCustomerType(data.customer.type)
+        setCustomerType(type) // set type based on search type
       } else {
         setCustomerFound(false)
         setCustomerType('')
@@ -59,8 +68,9 @@ const AddVehicleSearchCustomer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/customers', {
+      const response = await fetch('http://localhost:8081/vehicle/customers', { //////
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -71,7 +81,7 @@ const AddVehicleSearchCustomer = () => {
       })
 
       if (response.ok) {
-        navigate('/add-vehicle-new') // Navigate to next page
+        navigate('/add-vehicle-new')
       }
     } catch (error) {
       console.error('Error saving customer:', error)
@@ -82,19 +92,41 @@ const AddVehicleSearchCustomer = () => {
     <div className="search-customer-container">
       <h1>Add Vehicle - Search for Customer</h1>
 
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="SSN or Tax ID"
-          value={searchId}
-          onChange={(e) => setSearchId(e.target.value)}
-        />
-        <button onClick={handleSearch}>SEARCH FOR CUSTOMER</button>
+      <div className="search-sections">
+        {/* Individual Search Section */}
+        <div className="search-section">
+          <input
+            type="text"
+            placeholder="Enter SSN"
+            value={ssn}
+            onChange={(e) => setSSN(e.target.value)}
+          />
+          <button onClick={() => {
+            console.log('Search button clicked')
+            handleSearch('individual', ssn)
+          }}>
+            Search for Customer by SSN
+          </button>
+        </div>
+
+        {/* Business Search Section */}
+        <div className="search-section">
+          <input
+            type="text"
+            placeholder="Enter Tax ID"
+            value={taxId}
+            onChange={(e) => setTaxId(e.target.value)}
+          />
+          <button onClick={() => handleSearch('business', taxId)}>
+            Search for Business by Tax ID
+          </button>
+        </div>
       </div>
 
       {!customerFound && (
         <div className="customer-type-selection">
-          <h3>Select Customer Type:</h3>
+          <h3>Customer Not Found</h3>
+          <p>If the customer doesn't exist, select a customer type to create new:</p>
           <div className="radio-group">
             <label>
               <input
@@ -173,21 +205,21 @@ const AddVehicleSearchCustomer = () => {
             <input
               type="text"
               name="businessName"
-              placeholder="Name"
+              placeholder="Business Name"
               value={formData.businessName}
               onChange={handleInputChange}
             />
             <input
               type="text"
               name="contactFirst"
-              placeholder="Contact First"
+              placeholder="Contact First Name"
               value={formData.contactFirst}
               onChange={handleInputChange}
             />
             <input
               type="text"
               name="contactLast"
-              placeholder="Contact Last"
+              placeholder="Contact Last Name"
               value={formData.contactLast}
               onChange={handleInputChange}
             />
@@ -201,14 +233,14 @@ const AddVehicleSearchCustomer = () => {
             <input
               type="text"
               name="businessAddress"
-              placeholder="Address"
+              placeholder="Business Address"
               value={formData.businessAddress}
               onChange={handleInputChange}
             />
             <input
               type="tel"
               name="businessPhone"
-              placeholder="Phone"
+              placeholder="Business Phone"
               value={formData.businessPhone}
               onChange={handleInputChange}
             />
