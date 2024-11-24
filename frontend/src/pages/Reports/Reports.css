@@ -103,3 +103,24 @@
 .report-content {
   overflow-x: auto;
 }
+.drilldown-button {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.drilldown-button:hover {
+  background-color: #45a049;
+}
+.drilldown-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+.drilldown-section h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
