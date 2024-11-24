@@ -420,11 +420,11 @@ const HomePage = () => {
             <tr>
               <th>VIN</th>
               <th>Vehicle Type</th>
+              <th>Model</th>
               <th>Year</th>
               <th>Manufacturer</th>
               <th>Fuel Type</th>
-              <th>Color</th>
-              <th>Status</th>
+              <th>Horsepower</th>
               <th>Details</th>
             </tr>
           </thead>
