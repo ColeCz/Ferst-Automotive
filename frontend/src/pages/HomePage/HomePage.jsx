@@ -179,27 +179,100 @@ const HomePage = () => {
         </div>
 
         <div className="search-grid">
-          <input
-            type="text"
+          <select
             name="vehicleType"
-            placeholder="Vehicle Type"
             value={searchParams.vehicleType}
             onChange={handleInputChange}
-          />
-          <input
-            type="text"
+          >
+            <option value="">Select Vehicle Type</option>
+            <option value="Convertible">Convertible</option>
+            <option value="Coupe">Coupe</option>
+            <option value="CUV">CUV</option>
+            <option value="Minivan">Minivan</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Truck">Truck</option>
+            <option value="Van">Van</option>
+          </select>
+          <select
             name="manufacturer"
-            placeholder="Manufacturer"
             value={searchParams.manufacturer}
             onChange={handleInputChange}
-          />
-          <input
-            type="number"
+          >
+            <option value="">Select Manufacturer</option>
+            <option value="Acura">Acura</option>
+            <option value="Alfa Romeo">Alfa Romeo</option>
+            <option value="Aston Martin">Aston Martin</option>
+            <option value="Audi">Audi</option>
+            <option value="Bentley">Bentley</option>
+            <option value="BMW">BMW</option>
+            <option value="Buick">Buick</option>
+            <option value="Cadillac">Cadillac</option>
+            <option value="Chevrolet">Chevrolet</option>
+            <option value="Chrysler">Chrysler</option>
+            <option value="Dodge">Dodge</option>
+            <option value="Ferrari">Ferrari</option>
+            <option value="FIAT">FIAT</option>
+            <option value="Ford">Ford</option>
+            <option value="Geeley">Geeley</option>
+            <option value="GMC">GMC</option>
+            <option value="Honda">Honda</option>
+            <option value="Hyundai">Hyundai</option>
+            <option value="INFINITI">INFINITI</option>
+            <option value="Jaguar">Jaguar</option>
+            <option value="Jeep">Jeep</option>
+            <option value="Karma">Karma</option>
+            <option value="Kia">Kia</option>
+            <option value="Lamborghini">Lamborghini</option>
+            <option value="Land Rover">Land Rover</option>
+            <option value="Lexus">Lexus</option>
+            <option value="Lincoln">Lincoln</option>
+            <option value="Lotus">Lotus</option>
+            <option value="Maserati">Maserati</option>
+            <option value="MAZDA">MAZDA</option>
+            <option value="McLaren">McLaren</option>
+            <option value="Mercedes-Benz">Mercedes-Benz</option>
+            <option value="MINI">MINI</option>
+            <option value="Mitsubishi">Mitsubishi</option>
+            <option value="Nio">Nio</option>
+            <option value="Nissan">Nissan</option>
+            <option value="Porsche">Porsche</option>
+            <option value="Ram">Ram</option>
+            <option value="Rivian">Rivian</option>
+            <option value="smart">smart</option>
+            <option value="Subaru">Subaru</option>
+            <option value="Tesla">Tesla</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Volvo">Volvo</option>
+            <option value="XPeng">XPeng</option>
+          </select>
+          <select
             name="year"
-            placeholder="Year"
             value={searchParams.year}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Select Year</option>
+            <option value="2002">2002</option>
+            <option value="2003">2003</option>
+            <option value="2004">2004</option>
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+          </select>
           <input
             type="text"
             name="vin"
@@ -207,20 +280,53 @@ const HomePage = () => {
             value={searchParams.vin}
             onChange={handleInputChange}
           />
-          <input
-            type="text"
+          <select
             name="fuelType"
-            placeholder="Fuel Type"
             value={searchParams.fuelType}
             onChange={handleInputChange}
-          />
-          <input
-            type="text"
+          >
+            <option value="">Select Fuel Type</option>
+            <option value="Battery">Battery</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Fuel Cell">Fuel Cell</option>
+            <option value="Gas">Gas</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Natural Gas">Natural Gas</option>
+            <option value="Plugin Hybrid">Plugin Hybrid</option>
+          </select>
+          <select
             name="color"
-            placeholder="Color"
             value={searchParams.color}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Select Color</option>
+            <option value="Aluminum">Aluminum</option>
+            <option value="Beige">Beige</option>
+            <option value="Black">Black</option>
+            <option value="Blue">Blue</option>
+            <option value="Bronze">Bronze</option>
+            <option value="Brown">Brown</option>
+            <option value="Claret">Claret</option>
+            <option value="Copper">Copper</option>
+            <option value="Cream">Cream</option>
+            <option value="Gold">Gold</option>
+            <option value="Gray">Gray</option>
+            <option value="Green">Green</option>
+            <option value="Maroon">Maroon</option>
+            <option value="Metallic">Metallic</option>
+            <option value="Navy">Navy</option>
+            <option value="Orange">Orange</option>
+            <option value="Pink">Pink</option>
+            <option value="Purple">Purple</option>
+            <option value="Red">Red</option>
+            <option value="Rose">Rose</option>
+            <option value="Rust">Rust</option>
+            <option value="Silver">Silver</option>
+            <option value="Tan">Tan</option>
+            <option value="Turquoise">Turquoise</option>
+            <option value="White">White</option>
+            <option value="Yellow">Yellow</option>
+          </select>
           <input
             type="text"
             name="keyword"
