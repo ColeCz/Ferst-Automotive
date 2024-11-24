@@ -56,7 +56,14 @@ const Reports = () => {
       if (column === 'seller_type' || column === 'seller_name') return value
 
       // handle num types
-      if (column === 'avg_purchase_price' || column === 'cost_per_vehicle') {
+      if (
+        column === 'avg_purchase_price' || 
+        column === 'cost_per_vehicle' ||
+        // Add condition for Price Per Condition report columns
+        column === 'average_price' ||
+        column === 'price' ||
+        column.toLowerCase().includes('price')
+      ) {
         const numValue = parseFloat(value)
         if (isNaN(numValue)) return '-'
         return `$${numValue.toLocaleString('en-US', {

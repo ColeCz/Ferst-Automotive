@@ -77,11 +77,16 @@ const HomePage = () => {
       }
       const data = await response.json()
 
+      console.log('Raw metrics data:', data)
+      console.log('Pending parts data:', data.vehicles_awaiting_parts_count)
+
       // extract nums from the nested arrays returned by the API
       const availableCount = data.available_vehicles_count?.[0]?.[0] || 0
-      const pendingCount = data.vehicles_awaiting_parts_count
-        ? data.vehicles_awaiting_parts_count[0][0]
-        : 0
+      const pendingCount = Array.isArray(data.vehicles_awaiting_parts_count) 
+          ? data.vehicles_awaiting_parts_count[0][0]
+          : data.vehicles_awaiting_parts_count || 0
+
+      console.log('Processed counts:', { availableCount, pendingCount })
 
       setMetrics({
         availableVehicles: availableCount, // 217
