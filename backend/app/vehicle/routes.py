@@ -203,15 +203,31 @@ def add_customer():
             with conn.cursor() as cur:
                 query = db.get_query("add-individual")
                 cur.execute(query, parameters)
+                # Get the new customer_id
+                cur.execute(
+                    "SELECT currval(pg_get_serial_sequence('customer', 'customer_id'))"
+                )
+                customer_id = cur.fetchone()[0]
                 conn.commit()
-            return {"message": "Individual customer added successfully"}
+            return {
+                "message": "Individual customer added successfully",
+                "customerId": customer_id,
+            }
 
         elif parameters.get("tin"):
             with conn.cursor() as cur:
                 query = db.get_query("add-business")
                 cur.execute(query, parameters)
+                # Get the new customer_id
+                cur.execute(
+                    "SELECT currval(pg_get_serial_sequence('customer', 'customer_id'))"
+                )
+                customer_id = cur.fetchone()[0]
                 conn.commit()
-            return {"message": "Business customer added successfully"}
+            return {
+                "message": "Business customer added successfully",
+                "customerId": customer_id,
+            }
 
         else:
             return {"error": "You must fill out every required field (all but email)"}
