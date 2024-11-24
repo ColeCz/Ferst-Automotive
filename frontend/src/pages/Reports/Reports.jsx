@@ -5,28 +5,27 @@ const Reports = () => {
   const [selectedReport, setSelectedReport] = useState(null)
   const [reportData, setReportData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [drilldownData, setDrilldownData] = useState(null) 
+  const [drilldownData, setDrilldownData] = useState(null)
   const [month, setMonth] = useState(new Date().getMonth() + 1) // Current month
   const [year, setYear] = useState(new Date().getFullYear()) // Current year
 
   const fetchReportData = async (reportType) => {
     setIsLoading(true)
-    setDrilldownData(null)  // to clear drilldown data when changing reports
+    setDrilldownData(null) // to clear drilldown data when changing reports
     try {
       let url = `http://localhost:8081/reports/${reportType}`
-      
+
       // for monthly sales, fetch all months
       if (reportType === 'monthly-sales') {
         // get data for last 5y
         const currentYear = new Date().getFullYear()
         const allData = []
-        
+
         for (let y = currentYear; y >= currentYear - 4; y--) {
           for (let m = 1; m <= 12; m++) {
-            const response = await fetch(
-              `${url}?month=${m}&year=${y}`,
-              { credentials: 'include' }
-            )
+            const response = await fetch(`${url}?month=${m}&year=${y}`, {
+              credentials: 'include',
+            })
             if (response.ok) {
               const data = await response.json()
               if (data && data.length > 0 && data[0].total_vehicles_sold > 0) {
@@ -38,11 +37,13 @@ const Reports = () => {
             }
           }
         }
-        setReportData(allData.sort((a, b) => {
-          // sort by year descending, then month descending
-          if (b.year !== a.year) return b.year - a.year
-          return b.month - a.month
-        }))
+        setReportData(
+          allData.sort((a, b) => {
+            // sort by year descending, then month descending
+            if (b.year !== a.year) return b.year - a.year
+            return b.month - a.month
+          }),
+        )
       } else {
         const response = await fetch(url, {
           credentials: 'include',
@@ -65,7 +66,7 @@ const Reports = () => {
     try {
       const response = await fetch(
         `http://localhost:8081/reports/monthly-sales-drilldown?month=${month}&year=${year}`,
-        { credentials: 'include' }
+        { credentials: 'include' },
       )
       if (!response.ok) {
         throw new Error('Failed to fetch drilldown data')
@@ -81,7 +82,7 @@ const Reports = () => {
 
   const handleReportSelect = (reportType) => {
     setSelectedReport(reportType)
-    setDrilldownData(null)  // clear drilldown data when changing reports
+    setDrilldownData(null) // clear drilldown data when changing reports
     fetchReportData(reportType)
   }
 
@@ -105,20 +106,29 @@ const Reports = () => {
               {reportData.map((row, index) => (
                 <tr key={index}>
                   <td>
-                    {new Date(2024, row.month - 1, 1).toLocaleString('default', {
-                      month: 'long'
-                    })}
+                    {new Date(2024, row.month - 1, 1).toLocaleString(
+                      'default',
+                      {
+                        month: 'long',
+                      },
+                    )}
                   </td>
                   <td>{row.year}</td>
                   <td>{row.total_vehicles_sold.toLocaleString('en-US')}</td>
-                  <td>${row.total_gross_income.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}</td>
-                  <td>${row.total_net_income.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}</td>
+                  <td>
+                    $
+                    {row.total_gross_income.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>
+                    $
+                    {row.total_net_income.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -126,7 +136,13 @@ const Reports = () => {
 
           {drilldownData && (
             <div className="drilldown-section">
-              <h2>Sales Details for {new Date(2024, month - 1, 1).toLocaleString('default', { month: 'long' })} {year}</h2>
+              <h2>
+                Sales Details for{' '}
+                {new Date(2024, month - 1, 1).toLocaleString('default', {
+                  month: 'long',
+                })}{' '}
+                {year}
+              </h2>
               <table className="report-table">
                 <thead>
                   <tr>
@@ -140,10 +156,13 @@ const Reports = () => {
                     <tr key={index}>
                       <td>{row.salesperson}</td>
                       <td>{row.vehicles_sold.toLocaleString('en-US')}</td>
-                      <td>${row.total_sales_amount.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                      })}</td>
+                      <td>
+                        $
+                        {row.total_sales_amount.toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -172,7 +191,7 @@ const Reports = () => {
 
       // handle num types
       if (
-        column === 'avg_purchase_price' || 
+        column === 'avg_purchase_price' ||
         column === 'cost_per_vehicle' ||
         // add condition for Price Per Condition report columns
         column === 'average_price' ||
@@ -280,9 +299,7 @@ const Reports = () => {
               )
             })}
           </select>
-          <button onClick={fetchDrilldownData}>
-            Drilldown
-          </button>
+          <button onClick={fetchDrilldownData}>Drilldown</button>
         </div>
       )}
 

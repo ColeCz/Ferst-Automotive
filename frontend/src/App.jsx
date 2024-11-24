@@ -70,8 +70,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route 
-            path="/add-vehicle-new"  // Changed from "/add-vehicle-form"
+          <Route
+            path="/add-vehicle-new" // Changed from "/add-vehicle-form"
             element={
               <ProtectedRoute requiredRole="clerk">
                 <VehicleForm />

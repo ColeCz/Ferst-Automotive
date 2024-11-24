@@ -14,7 +14,7 @@ const ProtectedElement = ({
     const fetchSession = async () => {
       try {
         const response = await fetch('http://localhost:8081/auth/session', {
-          credentials: 'include'  // Add this
+          credentials: 'include', // Add this
         })
         if (!response.ok) {
           throw new Error('Failed to fetch session')

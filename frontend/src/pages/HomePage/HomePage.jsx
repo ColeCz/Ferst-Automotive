@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../../components/common/Header/Header'
+import { Link } from 'react-router-dom'
 import ProtectedElement from '../../components/common/ProtectedElement/ProtectedElement'
 import './HomePage.css'
 
@@ -34,11 +34,13 @@ const HomePage = () => {
     try {
       const queryParams = new URLSearchParams({
         ...searchParams,
-        search_filter: filterSelection
+        search_filter: filterSelection,
       }).toString()
-        
+
       console.log('Making API call with queryParams:', queryParams)
-      const response = await fetch(`http://localhost:8081/vehicle/?${queryParams}`)
+      const response = await fetch(
+        `http://localhost:8081/vehicle/?${queryParams}`,
+      )
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
@@ -82,9 +84,9 @@ const HomePage = () => {
 
       // extract nums from the nested arrays returned by the API
       const availableCount = data.available_vehicles_count?.[0]?.[0] || 0
-      const pendingCount = Array.isArray(data.vehicles_awaiting_parts_count) 
-          ? data.vehicles_awaiting_parts_count[0][0]
-          : data.vehicles_awaiting_parts_count || 0
+      const pendingCount = Array.isArray(data.vehicles_awaiting_parts_count)
+        ? data.vehicles_awaiting_parts_count[0][0]
+        : data.vehicles_awaiting_parts_count || 0
 
       console.log('Processed counts:', { availableCount, pendingCount })
 
@@ -413,33 +415,42 @@ const HomePage = () => {
         />
       </div>
       <div className="search-results">
-  <table className="vehicles-table">
-    <thead>
-      <tr>
-        <th>VIN</th>
-        <th>Vehicle Type</th>
-        <th>Year</th>
-        <th>Manufacturer</th>
-        <th>Fuel Type</th>
-        <th>Color</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {searchResults.map((vehicle, index) => (
-        <tr key={index}>
-          <td>{vehicle[0]}</td>
-          <td>{vehicle[1]}</td>
-          <td>{vehicle[2]}</td>
-          <td>{vehicle[3]}</td>
-          <td>{vehicle[4]}</td>
-          <td>{vehicle[5]}</td>
-          <td>{vehicle[6]}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+        <table className="vehicles-table">
+          <thead>
+            <tr>
+              <th>VIN</th>
+              <th>Vehicle Type</th>
+              <th>Year</th>
+              <th>Manufacturer</th>
+              <th>Fuel Type</th>
+              <th>Color</th>
+              <th>Status</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchResults.map((vehicle, index) => (
+              <tr key={index}>
+                <td>{vehicle[0]}</td>
+                <td>{vehicle[1]}</td>
+                <td>{vehicle[2]}</td>
+                <td>{vehicle[3]}</td>
+                <td>{vehicle[4]}</td>
+                <td>{vehicle[5]}</td>
+                <td>{vehicle[6]}</td>
+                <td>
+                  <Link
+                    to={`/details/${vehicle[0]}`}
+                    className="details-button"
+                  >
+                    Details
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

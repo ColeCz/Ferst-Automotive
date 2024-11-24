@@ -36,7 +36,9 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }
 
   //updated to return children if user has required role or if they have owner role
-  return (userRoles && (userRoles.owner || userRoles[requiredRole])) ? children : null
+  return userRoles && (userRoles.owner || userRoles[requiredRole])
+    ? children
+    : null
 }
 
 export default ProtectedRoute

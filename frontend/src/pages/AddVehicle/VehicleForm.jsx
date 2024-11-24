@@ -1,81 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './VehicleForm.css';
+import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import './VehicleForm.css'
 
 const VehicleForm = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { customerId, customerType } = location.state || {};
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { customerId, customerType } = location.state || {}
 
   const [formData, setFormData] = useState({
     vin: '',
     vehicle_type: '',
     condition: '',
     trans_price: '',
-  });
+  })
 
   // check if customerId exists (persisted from last page)
   useEffect(() => {
     if (!customerId) {
-      navigate('/add-vehicle-search-for-customer');
+      navigate('/add-vehicle-search-for-customer')
     }
-  }, [customerId, navigate]);
+  }, [customerId, navigate])
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
+    const { name, value } = e.target
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // create FormData object (this is the form the backend is expecting)
-    const formDataObj = new FormData();
-    formDataObj.append('vin', formData.vin);
-    formDataObj.append('vehicle_type', formData.vehicle_type);
-    formDataObj.append('condition', formData.condition);
-    formDataObj.append('trans_price', formData.trans_price);
-    formDataObj.append('customer_id', customerId);
+    const formDataObj = new FormData()
+    formDataObj.append('vin', formData.vin)
+    formDataObj.append('vehicle_type', formData.vehicle_type)
+    formDataObj.append('condition', formData.condition)
+    formDataObj.append('trans_price', formData.trans_price)
+    formDataObj.append('customer_id', customerId)
 
     // these fields are required by backend, but can be default values:
-    formDataObj.append('model_name', 'Unknown');
-    formDataObj.append('model_year', new Date().getFullYear());
-    formDataObj.append('manufacturer', 'Unknown');
-    formDataObj.append('fuel_type', 'Unknown');
-    formDataObj.append('horsepower', '0');
-    formDataObj.append('description', 'No description provided');
+    formDataObj.append('model_name', 'Unknown')
+    formDataObj.append('model_year', new Date().getFullYear())
+    formDataObj.append('manufacturer', 'Unknown')
+    formDataObj.append('fuel_type', 'Unknown')
+    formDataObj.append('horsepower', '0')
+    formDataObj.append('description', 'No description provided')
 
     try {
-      const response = await fetch('http://localhost:8081/vehicle/add-vehicle', {
-        method: 'POST',
-        credentials: 'include',
-        body: formDataObj
-      });
+      const response = await fetch(
+        'http://localhost:8081/vehicle/add-vehicle',
+        {
+          method: 'POST',
+          credentials: 'include',
+          body: formDataObj,
+        },
+      )
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to add vehicle');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to add vehicle')
       }
- 
-      const data = await response.json();
-      if (data.message === "vehicle purchased successfully") {
-        alert('Vehicle added successfully!');
-        navigate('/');
+
+      const data = await response.json()
+      if (data.message === 'vehicle purchased successfully') {
+        alert('Vehicle added successfully!')
+        navigate('/')
       }
     } catch (error) {
-      console.error('Error adding vehicle:', error);
-      alert('Error adding vehicle: ' + error.message);
+      console.error('Error adding vehicle:', error)
+      alert('Error adding vehicle: ' + error.message)
     }
-  };
+  }
 
   return (
     <div className="vehicle-form-container">
       <h1>Add New Vehicle</h1>
-      <h2>Adding vehicle for {customerType === 'individual' ? 'Individual' : 'Business'} Customer ID: {customerId}</h2>
-      
+      <h2>
+        Adding vehicle for{' '}
+        {customerType === 'individual' ? 'Individual' : 'Business'} Customer ID:{' '}
+        {customerId}
+      </h2>
+
       <form onSubmit={handleSubmit} className="vehicle-form">
         <div className="form-group">
           <label htmlFor="vin">VIN:</label>
@@ -88,7 +95,7 @@ const VehicleForm = () => {
             required
           />
         </div>
- 
+
         <div className="form-group">
           <label htmlFor="vehicle_type">Vehicle Type:</label>
           <select
@@ -106,7 +113,7 @@ const VehicleForm = () => {
             <option value="Convertible">Convertible</option>
           </select>
         </div>
- 
+
         <div className="form-group">
           <label htmlFor="condition">Condition:</label>
           <select
@@ -123,7 +130,7 @@ const VehicleForm = () => {
             <option value="Fair">Fair</option>
           </select>
         </div>
- 
+
         <div className="form-group">
           <label htmlFor="trans_price">Purchase Price:</label>
           <input
@@ -137,16 +144,21 @@ const VehicleForm = () => {
             required
           />
         </div>
- 
-        <button 
-          type="submit" 
-          disabled={!formData.vin || !formData.vehicle_type || !formData.condition || !formData.trans_price}
+
+        <button
+          type="submit"
+          disabled={
+            !formData.vin ||
+            !formData.vehicle_type ||
+            !formData.condition ||
+            !formData.trans_price
+          }
         >
           Add Vehicle
         </button>
       </form>
     </div>
-  );
- };
+  )
+}
 
-export default VehicleForm;
+export default VehicleForm
