@@ -19,7 +19,7 @@ SELECT
     
     -- Calculate the average price of transactions for each vehicle type and condition
     -- If no transaction is found, use COALESCE to return 0 as the average price
-    COALESCE(ROUND(AVG(t.trans_price), 2), 0) AS avg_price
+    COALESCE(ROUND(AVG(CASE WHEN p.condition = c.condition THEN t.trans_price END), 2), 0) AS avg_price
 
 FROM 
     -- Use the vehicle_type_list (which contains distinct vehicle types) for the vehicle_type
@@ -36,7 +36,7 @@ LEFT JOIN
 
 -- Left join to the purchase table to get the purchase details matching both transaction ID and condition
 LEFT JOIN 
-    public.purchase p ON p.transactions = t.trans_id AND p.condition = c.condition
+    public.purchase p ON p.transactions = t.trans_id
 
 -- Group the results by vehicle type and condition to calculate the average price for each combination
 GROUP BY 
