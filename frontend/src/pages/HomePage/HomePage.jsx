@@ -273,13 +273,15 @@ const HomePage = () => {
             <option value="2022">2022</option>
             <option value="2023">2023</option>
           </select>
-          <input
-            type="text"
-            name="vin"
-            placeholder="VIN"
-            value={searchParams.vin}
-            onChange={handleInputChange}
-          />
+          {(userRoles.manager || userRoles.salesperson || userRoles.clerk) && (
+            <input
+              type="text"
+              name="vin"
+              placeholder="VIN"
+              value={searchParams.vin}
+              onChange={handleInputChange}
+            />
+          )}
           <select
             name="fuelType"
             value={searchParams.fuelType}
