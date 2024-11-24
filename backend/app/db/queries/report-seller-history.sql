@@ -36,7 +36,7 @@ SELECT
     -- If no purchase price, return NULL
     COALESCE(ROUND(sm.avg_purchase_price, 2), NULL) AS avg_purchase_price,
     -- If no cost per vehicle, return NULL
-    COALESCE(ROUND(sm.avg_purchase_price, 2), NULL) AS cost_per_vehicle,
+    COALESCE(ROUND(sm.cost_per_vehicle, 2), NULL) AS cost_per_vehicle,
     CASE
         WHEN sm.cost_per_vehicle > 500 THEN true  -- Flag if cost_per_vehicle is greater than 500
         ELSE false

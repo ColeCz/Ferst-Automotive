@@ -1,31 +1,6 @@
 # This file is not needed to run the application. It is a script used to generate the init sql script that adds all the transactions (purchase or sale)
 
 import csv
-from app import db
-
-# def map_customer(ssn_tid):
-#     customer_id = None
-#     # Connect to the database
-#     conn = db.get_connection()
-#
-#     try:
-#         with conn.cursor() as cur:
-#             # Check to see if there is a customer id in Individual and get their customer_id
-#             cur.execute("SELECT customer_id FROM Individual WHERE ssn = %s;", (ssn_tid,))
-#             customer_id = cur.fetchone()
-#             if customer_id:
-#                 return customer_id[0]
-#             # Check to see if there is a customer id in Business and get their customer_id
-#             cur.execute("SELECT customer_id FROM Business WHERE tid = %s;", (ssn_tid,))
-#             customer_id = cur.fetchone()
-#             if customer_id:
-#                 return customer_id[0]
-#
-#             return None
-#
-#     except Exception as e:
-#         return f"Error: {e}"
-
 
 # Initialize transaction ID
 trans_id = 1
@@ -44,9 +19,6 @@ with open('vehicles.tsv', 'r', newline='', encoding='utf-8') as f:
         sale_date = row['sale_date']
         sold_to_customer = row['sold_to_customer']
         salesperson = row['salesperson']
-        # # Map customer ssn and tid's to a customer id
-        # purchased_from_customer = map_customer(purchased_from_customer)
-        # sold_to_customer = map_customer(sold_to_customer)
 
         # Check if purchase_date is present
         if purchase_date.strip():

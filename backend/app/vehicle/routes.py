@@ -6,6 +6,7 @@ from flask import session
 from . import blueprint
 from app import auth
 from app import db
+from app import transaction
 from datetime import datetime
 
 
@@ -115,3 +116,48 @@ def search_customer():
         return {"error": "Must enter TIN or SSN to search"}
 
     return {"customer": customer}
+
+
+@blueprint.route('/add-customer', methods=['GET'])
+def add_customer():
+
+    parameters = {
+        'email': request.args.get('email'), # optional
+        'phone_num': request.args.get('phone_num'),
+        'postal_code': request.args.get('postal_code'),
+        'state_abbrv': request.args.get('state_abbrv'),
+        'city': request.args.get('city'),
+        'street': request.args.get('street'),
+
+        'ssn': request.args.get('ssn'),
+        'firstname': request.args.get('firstname'),
+        'lastname': request.args.get('lastname'),
+
+        'tin': request.args.get('tin'),
+        'business_name': request.args.get('business_name'),
+        'contact_title': request.args.get('contact_title'),
+        'contact_firstname': request.args.get('contact_firstname'),
+        'contact_lastname': request.args.get('contact_lastname')
+    }
+
+    conn = db.get_connection()
+    try:
+        if parameters.get('ssn'):
+            with conn.cursor() as cur:
+                query = db.get_query('add-individual')
+                cur.execute(query, parameters)
+                conn.commit()
+            return {"message": "Individual customer added successfully"}
+
+        elif parameters.get('tin'):
+            with conn.cursor() as cur:
+                query = db.get_query('add-business')
+                cur.execute(query, parameters)
+                conn.commit()
+            return {"message": "Business customer added successfully"}
+
+        else:
+            return {"error": "You must fill out every required field (all but email)"}
+
+    except Exception as e:
+        return {"error": str(e)}        
