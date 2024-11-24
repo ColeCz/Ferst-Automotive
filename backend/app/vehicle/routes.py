@@ -15,10 +15,20 @@ def query_db(query_name: str, query_parameters: dict = None):
 
     try:
         with conn.cursor() as cur:
-            cur.execute(db.get_query(query_name), query_parameters)
+            query = db.get_query(query_name)
+            print(f"\nExecuting query '{query_name}':")
+            print("Query:", query)
+            print("Parameters:", query_parameters)
+            cur.execute(query, query_parameters)
             result = cur.fetchall()
+            if result:
+                print(f"Number of results: {len(result)}")
+                print("First row:", result[0] if result else None)
+            else:
+                print("No results returned")
             return result if result else None
     except Exception as e:
+        print(f"Error executing query: {e}")
         return f"Error: {e}"
 
 
@@ -36,6 +46,17 @@ def validate_year(year=None):
 # route for searching vehicles, for all permissions
 @blueprint.route("/", methods=["GET"])
 def search_vehicles():
+    print("\n=== Starting Vehicle Search ===")
+    print("Request args:", request.args)
+    print(
+        "User roles:",
+        {
+            "manager": auth.has_role("manager"),
+            "owner": auth.has_role("owner"),
+            "clerk": auth.has_role("clerk"),
+            "salesperson": auth.has_role("salesperson"),
+        },
+    )
 
     # get all front-end parameters that will be used in the queries
     keyword = request.args.get("keyword", None)
@@ -89,6 +110,44 @@ def search_vehicles():
 
     available_vehicles_count = query_db("count-available-vehicles")  # returned for all
 
+    print("Filter type:", parameters.get("search_filter"))
+    print(
+        "Query used:",
+        (
+            "search-vehicles-unsold"
+            if parameters.get("search_filter") == "unsold"
+            else (
+                "search-vehicles-sold"
+                if parameters.get("search_filter") == "sold"
+                else "search-vehicles-all"
+            )
+        ),
+    )
+    print(
+        "Number of matching vehicles:",
+        len(matching_vehicles) if matching_vehicles else 0,
+    )
+    print("Raw matching vehicles data:", matching_vehicles)
+
+    query_name = None
+    if parameters.get("search_filter") == "unsold":
+        query_name = "search-vehicles-unsold"
+    elif parameters.get("search_filter") == "sold":
+        query_name = "search-vehicles-sold"
+    else:
+        query_name = "search-vehicles-all"
+
+    print(f"Using query: {query_name}")
+    print(f"With parameters: {parameters}")
+
+    print("\nFinal results:")
+    print(
+        f"Number of matching vehicles: {len(matching_vehicles) if matching_vehicles else 0}"
+    )
+    print(f"Available vehicles count: {available_vehicles_count}")
+    print(f"Pending parts count: {vehicles_awaiting_parts_count}")
+    print("=== End Vehicle Search ===\n")
+
     return {
         "matching_vehicles": matching_vehicles,
         "available_vehicles_count": available_vehicles_count,
@@ -118,40 +177,38 @@ def search_customer():
     return {"customer": customer}
 
 
-@blueprint.route('/add-customer', methods=['GET'])
+@blueprint.route("/add-customer", methods=["GET"])
 def add_customer():
 
     parameters = {
-        'email': request.args.get('email'), # optional
-        'phone_num': request.args.get('phone_num'),
-        'postal_code': request.args.get('postal_code'),
-        'state_abbrv': request.args.get('state_abbrv'),
-        'city': request.args.get('city'),
-        'street': request.args.get('street'),
-
-        'ssn': request.args.get('ssn'),
-        'firstname': request.args.get('firstname'),
-        'lastname': request.args.get('lastname'),
-
-        'tin': request.args.get('tin'),
-        'business_name': request.args.get('business_name'),
-        'contact_title': request.args.get('contact_title'),
-        'contact_firstname': request.args.get('contact_firstname'),
-        'contact_lastname': request.args.get('contact_lastname')
+        "email": request.args.get("email"),  # optional
+        "phone_num": request.args.get("phone_num"),
+        "postal_code": request.args.get("postal_code"),
+        "state_abbrv": request.args.get("state_abbrv"),
+        "city": request.args.get("city"),
+        "street": request.args.get("street"),
+        "ssn": request.args.get("ssn"),
+        "firstname": request.args.get("firstname"),
+        "lastname": request.args.get("lastname"),
+        "tin": request.args.get("tin"),
+        "business_name": request.args.get("business_name"),
+        "contact_title": request.args.get("contact_title"),
+        "contact_firstname": request.args.get("contact_firstname"),
+        "contact_lastname": request.args.get("contact_lastname"),
     }
 
     conn = db.get_connection()
     try:
-        if parameters.get('ssn'):
+        if parameters.get("ssn"):
             with conn.cursor() as cur:
-                query = db.get_query('add-individual')
+                query = db.get_query("add-individual")
                 cur.execute(query, parameters)
                 conn.commit()
             return {"message": "Individual customer added successfully"}
 
-        elif parameters.get('tin'):
+        elif parameters.get("tin"):
             with conn.cursor() as cur:
-                query = db.get_query('add-business')
+                query = db.get_query("add-business")
                 cur.execute(query, parameters)
                 conn.commit()
             return {"message": "Business customer added successfully"}
@@ -160,4 +217,4 @@ def add_customer():
             return {"error": "You must fill out every required field (all but email)"}
 
     except Exception as e:
-        return {"error": str(e)}        
+        return {"error": str(e)}
