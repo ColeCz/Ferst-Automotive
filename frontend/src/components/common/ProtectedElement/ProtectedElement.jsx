@@ -47,7 +47,7 @@ const ProtectedElement = ({
       ? requiredRole.some((role) => userRoles[role])
       : userRoles[requiredRole])
 
-  return hasRequiredRole ? Element : Element // change second condition to "fallback" later  to enforce restrictions.
+  return hasRequiredRole ? Element : fallback // change second condition to "fallback" later  to enforce restrictions.
 }
 
 export default ProtectedElement
