@@ -14,7 +14,6 @@ const HomePage = () => {
     fuelType: '',
     color: '',
     keyword: '',
-    filter: 'all',
   })
   const [metrics, setMetrics] = useState({
     availableVehicles: 0,
@@ -31,17 +30,20 @@ const HomePage = () => {
 
   // later on, need to wrap this in useCallback()
   const performSearch = useCallback(async () => {
+    console.log('performSearch called with filterSelection:', filterSelection)
     try {
       const queryParams = new URLSearchParams({
         ...searchParams,
         search_filter: filterSelection
       }).toString()
         
+      console.log('Making API call with queryParams:', queryParams)
       const response = await fetch(`http://localhost:8081/vehicle/?${queryParams}`)
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
+      console.log('Received search results:', data)
       setSearchResults(data.matching_vehicles || [])
     } catch (error) {
       console.error('Error performing search:', error)
@@ -52,13 +54,13 @@ const HomePage = () => {
   useEffect(() => {
     fetchMetrics() // defined below
     fetchSession() // defined below
-    performSearch() // defined below 
-  }, [performSearch])
+  }, [])
 
   // this useEffect exists to handle filter changes. performSEarch is memoized & only recreated when searchParams or filterSelection changes
   useEffect(() => {
+    console.log('Filter changed, performing search...')
     performSearch()
-  }, [performSearch])
+  }, [filterSelection, performSearch])
 
   // purely for bug testing
   useEffect(() => {
@@ -239,7 +241,10 @@ const HomePage = () => {
                     name="filter"
                     value="all"
                     checked={filterSelection === 'all'}
-                    onChange={(e) => setFilterSelection(e.target.value)}
+                    onChange={(e) => {
+                      console.log('Filter changed to:', e.target.value)
+                      setFilterSelection(e.target.value)
+                    }}
                   />
                   All Vehicles
                 </label>
@@ -249,7 +254,11 @@ const HomePage = () => {
                     name="filter"
                     value="sold"
                     checked={filterSelection === 'sold'}
-                    onChange={(e) => setFilterSelection(e.target.value)}
+                    // the below changes filterSelection to "sold", and because filterSeleciton is in the dependency array of performSearch in the useEffect, performSearch is recreated with the new filter value. performSearch itself is also in the dependency array of a separate useEffect, so the effect runs again, re-calling performSearch, and query re-runs.
+                    onChange={(e) => {
+                      console.log('Filter changed to:', e.target.value)
+                      setFilterSelection(e.target.value)
+                    }}
                   />
                   Sold Vehicles
                 </label>
@@ -259,7 +268,10 @@ const HomePage = () => {
                     name="filter"
                     value="unsold"
                     checked={filterSelection === 'unsold'}
-                    onChange={(e) => setFilterSelection(e.target.value)}
+                    onChange={(e) => {
+                      console.log('Filter changed to:', e.target.value)
+                      setFilterSelection(e.target.value)
+                    }}
                   />
                   Unsold Vehicles
                 </label>
