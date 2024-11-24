@@ -62,8 +62,8 @@ def add():
                 "condition": request.form.get("condition")
             }
         case "SALE":
-            # if not auth.has_role("salesperson"): # TODO Uncomment after testing
-            #     return {"success": False, "message": "User does not have salesperson role"}
+            if not auth.has_role("salesperson"):
+                return {"success": False, "message": "User does not have salesperson role"}
 
             sale_price = purchase_price * Decimal(1.25)  # TODO does the front end pass in the price as a string?
             sale_price += parts_cost * Decimal(1.1)
