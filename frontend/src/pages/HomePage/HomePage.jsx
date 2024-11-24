@@ -7,11 +7,11 @@ import './HomePage.css'
 const HomePage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useState({
-    vehicleType: '',
+    vehicle_type: '',
     manufacturer: '',
     year: '',
     vin: '',
-    fuelType: '',
+    fuel_type: '',
     color: '',
     keyword: '',
   })
@@ -180,8 +180,8 @@ const HomePage = () => {
 
         <div className="search-grid">
           <select
-            name="vehicleType"
-            value={searchParams.vehicleType}
+            name="vehicle_type"
+            value={searchParams.vehicle_type}
             onChange={handleInputChange}
           >
             <option value="">Select Vehicle Type</option>
@@ -283,8 +283,8 @@ const HomePage = () => {
             />
           )}
           <select
-            name="fuelType"
-            value={searchParams.fuelType}
+            name="fuel_type"
+            value={searchParams.fuel_type}
             onChange={handleInputChange}
           >
             <option value="">Select Fuel Type</option>
