@@ -41,10 +41,10 @@ with open('vehicles.tsv', 'r', newline='', encoding='utf-8') as f:
 
             # Insert into Transaction table for sale
             print(f"INSERT INTO Transaction (trans_date, trans_price, customer, vehicle_vin) "
-                  f"VALUES ('{purchase_date}', "
+                  f"VALUES ('{sale_date}', "
                   f"{purchase_price} * 1.25 + 1.10 * (SELECT COALESCE(SUM(unit_price * quantity), 0) FROM part WHERE vehicle_vin = '{VIN}'), "
-                  f"(SELECT customer_id FROM Individual WHERE ssn = '{purchased_from_customer}' "
-                  f"UNION SELECT customer_id FROM Business WHERE tin = '{purchased_from_customer}'), "
+                  f"(SELECT customer_id FROM Individual WHERE ssn = '{sold_to_customer}' "
+                  f"UNION SELECT customer_id FROM Business WHERE tin = '{sold_to_customer}'), "
                   f"'{VIN}');")
 
             # Insert into Sale table
