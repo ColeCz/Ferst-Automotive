@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../../components/common/Header/Header'
 import ProtectedElement from '../../components/common/ProtectedElement/ProtectedElement'
@@ -27,12 +27,40 @@ const HomePage = () => {
     salesperson: false,
     manager: false,
   })
+  const [searchResults, setSearchResults] = useState([])
+
+  // later on, need to wrap this in useCallback()
+  const performSearch = useCallback(async () => {
+    try {
+      const queryParams = new URLSearchParams({
+        ...searchParams,
+        search_filter: filterSelection
+      }).toString()
+        
+      const response = await fetch(`http://localhost:8081/vehicle/?${queryParams}`)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data = await response.json()
+      setSearchResults(data.matching_vehicles || [])
+    } catch (error) {
+      console.error('Error performing search:', error)
+      setSearchResults([])
+    }
+  }, [searchParams, filterSelection])
 
   useEffect(() => {
     fetchMetrics() // defined below
     fetchSession() // defined below
-  }, [])
+    performSearch() // defined below 
+  }, [performSearch])
 
+  // this useEffect exists to handle filter changes. performSEarch is memoized & only recreated when searchParams or filterSelection changes
+  useEffect(() => {
+    performSearch()
+  }, [performSearch])
+
+  // purely for bug testing
   useEffect(() => {
     console.log('userRoles changed:', userRoles)
   }, [userRoles])
@@ -100,13 +128,7 @@ const HomePage = () => {
   }
 
   const handleSearch = () => {
-    const searchParamsWithFilter = {
-      ...searchParams,
-      filter: filterSelection,
-    }
-    console.log('Searching with params:', searchParams)
-
-    // Implement search functionality w/ filter
+    performSearch()
   }
 
   const handleAddVehicle = () => {
@@ -265,6 +287,34 @@ const HomePage = () => {
           requiredRole="manager"
         />
       </div>
+      <div className="search-results">
+  <table className="vehicles-table">
+    <thead>
+      <tr>
+        <th>VIN</th>
+        <th>Vehicle Type</th>
+        <th>Year</th>
+        <th>Manufacturer</th>
+        <th>Fuel Type</th>
+        <th>Color</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {searchResults.map((vehicle, index) => (
+        <tr key={index}>
+          <td>{vehicle[0]}</td>
+          <td>{vehicle[1]}</td>
+          <td>{vehicle[2]}</td>
+          <td>{vehicle[3]}</td>
+          <td>{vehicle[4]}</td>
+          <td>{vehicle[5]}</td>
+          <td>{vehicle[6]}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
     </div>
   )
 }
