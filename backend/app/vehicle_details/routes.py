@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 from app.vehicle_details import blueprint
 import logging
 
-# Database connection parameters 
+# Database connection parameters
 DB_HOST = 'db'
 DB_PORT = '5432'
 DB_NAME = 'dealership'
@@ -25,7 +25,7 @@ def execute_query(query, params=None):
             password=DB_PASSWORD
         ) as con:
             with con.cursor() as cur:
-                # Execute the provided query with parameters
+                # Execute the provided query with parameters (use dictionary for named placeholders)
                 cur.execute(query, params)
                 # Fetch all results
                 result = cur.fetchall()
@@ -39,6 +39,7 @@ def execute_query(query, params=None):
                 return formatted_result
     except psycopg.Error as e:
         logging.error(f"Database error: {e}")
+        logging.error(f"Error Details: {e.diag.message_detail}")
         return {"error": "Database error occurred, please try again later."}
     except Exception as e:
         logging.error(f"Error executing query: {e}")
@@ -47,8 +48,12 @@ def execute_query(query, params=None):
 # Route to fetch vehicle details based on the VIN (vehicle_id)
 @blueprint.route('/get-vehicle-details/<vin>', methods=['GET'])
 def vehicle_details(vin):
-    # Determine the user's role
-    user_role = request.args.get('role', 'public')  # Default to 'public' if no role provided
+   # Determine the user's role from the request arguments
+    user_role = request.args.get('role', 'public')  # Default to 'public' if no role is provided
+
+    # Step 4: Adjust role logic for the owner
+    if user_role == 'owner':
+        user_role = 'manager'  # Treat the owner as having manager-level access
 
     # Log the received VIN and role for debugging
     logging.info(f"Received VIN: {vin} and Role: {user_role}")
@@ -56,7 +61,7 @@ def vehicle_details(vin):
     # Map roles to their respective SQL query files
     query_paths = {
         'manager': 'app/db/queries/get-vehicle-details-manager.sql',
-        'owner': 'app/db/queries/get-vehicle-details-owner.sql',
+        'owner': 'app/db/queries/get-vehicle-details-manager.sql',  # Owner uses manager query
         'public': 'app/db/queries/get-vehicle-details.sql'  # Default for public users
     }
 
@@ -71,37 +76,23 @@ def vehicle_details(vin):
         # Log the SQL query to make sure it's being read correctly
         logging.info(f"SQL Query: {query}")
 
+        # Prepare parameters as a dictionary for named placeholders
+        params = {'vin': vin}  # Using named placeholder "vin"
+
         # Execute the query with the VIN as a parameter to fetch vehicle details
-        vehicle_details_result = execute_query(query, params={'vin': vin})
+        vehicle_details_result = execute_query(query, params=params)  # Pass params as dictionary
 
         # If the result contains an error, return the error as JSON
         if isinstance(vehicle_details_result, dict) and "error" in vehicle_details_result:
             logging.error(f"Error executing vehicle details query: {vehicle_details_result}")
             return jsonify(vehicle_details_result), 500
 
-        # Execute the parts cost query if the user is a manager, clerk, or owner
-        if user_role in ['manager', 'clerk', 'owner']:  # Including owner here
-            parts_cost_query = 'app/db/queries/get-parts-cost.sql'
-            with open(parts_cost_query, 'r') as file:
-                parts_cost_query_content = file.read()
-
-            parts_cost_result = execute_query(parts_cost_query_content, params={'vehicle_vin': vin})
-
-            # If the result contains an error, return the error as JSON
-            if isinstance(parts_cost_result, dict) and "error" in parts_cost_result:
-                logging.error(f"Error executing parts cost query: {parts_cost_result}")
-                return jsonify(parts_cost_result), 500
-
-            # Add total parts cost to the vehicle details result
-            total_parts_cost = parts_cost_result[0].get('sum', 0)  # Assuming the query returns a field named 'sum'
-            vehicle_details_result[0]['total_parts_cost'] = total_parts_cost
-
         # If no vehicle is found, return a 404 message
         if not vehicle_details_result:
             logging.warning(f"No vehicle found for VIN: {vin}")
             return jsonify({"message": "Vehicle not found"}), 404
 
-        # Return the vehicle details with parts cost as JSON
+        # Return the vehicle details as JSON
         return jsonify(vehicle_details_result[0])  # Return the first result
 
     except FileNotFoundError as e:
