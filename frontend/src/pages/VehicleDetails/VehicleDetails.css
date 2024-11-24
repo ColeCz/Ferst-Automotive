@@ -4,46 +4,38 @@
   max-width: 800px;
   margin: 0 auto;
 }
-
 .vehicle-info {
   background: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .details-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-
 .detail-item {
   display: flex;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
-
 .label {
   font-weight: bold;
   min-width: 150px;
 }
-
 .value {
   flex: 1;
 }
-
 .error-message {
   color: red;
   text-align: center;
   padding: 20px;
 }
-
 .loading {
   text-align: center;
   padding: 20px;
 }
-
 .sell-vehicle-button {
   margin-top: 20px;
   padding: 10px 20px;
@@ -56,11 +48,9 @@
   width: 100%;
   max-width: 200px;
 }
-
 .sell-vehicle-button:hover {
   background-color: #45a049;
 }
-
 .sell-vehicle-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
@@ -70,14 +60,12 @@
   padding-top: 20px;
   border-top: 1px solid #eee;
 }
-
 .financial-details .detail-item {
   background-color: #f8f9fa;
   padding: 10px;
   margin: 5px 0;
   border-radius: 4px;
 }
-
 .financial-details .value {
   color: #28a745;
   font-weight: bold;
@@ -87,7 +75,6 @@
   max-width: 800px;
   margin: 0 auto;
 }
-
 .section {
   background: white;
   padding: 20px;
@@ -95,7 +82,6 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .section h3 {
   margin-top: 0;
   margin-bottom: 15px;
@@ -103,40 +89,53 @@
   border-bottom: 2px solid #eee;
   padding-bottom: 10px;
 }
-
 .details-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 .detail-item {
   display: flex;
   padding: 8px;
   border-bottom: 1px solid #eee;
 }
-
 .detail-item:last-child {
   border-bottom: none;
 }
-
 .label {
   font-weight: bold;
   min-width: 150px;
   color: #666;
 }
-
 .value {
   flex: 1;
 }
-
 .error-message {
   color: #dc3545;
   text-align: center;
   padding: 20px;
 }
-
 .loading {
   text-align: center;
   padding: 20px;
+}
+.sell-vehicle-button {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+.sell-vehicle-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+.sell-vehicle-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }

@@ -255,6 +255,21 @@ function VehicleDetails() {
           }
           requiredRole="manager"
         />
+        {/* Sell Vehicle Button */}
+        <ProtectedElement
+          element={
+            <div className="section">
+              <button 
+                className="sell-vehicle-button" 
+                onClick={handleSellVehicle}
+                disabled={vehicle.sale_status === 'Sold'}
+              >
+                {vehicle.sale_status === 'Sold' ? 'VEHICLE ALREADY SOLD' : 'SELL VEHICLE'}
+              </button>
+            </div>
+          }
+          requiredRole="salesperson"
+        />
       </div>
     </div>
   )
