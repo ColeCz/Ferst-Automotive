@@ -4,11 +4,11 @@
 Link: [http://3.147.185.195:8080/login/](http://3.147.185.195:8080/login/)
 
 Credentials (in the format of role - username, password)
-  Owner - owner, owner (by far the most interesting view because it encompasses all features)
-  Manager - user01, pass01
-  clerk - user02, pass02
-  salesperson - user03, pass03
-  user - no credentials, just ensure you're logged out and route to [http://3.147.185.195:8080/](http://3.147.185.195:8080/). Note that this view is the least interesting. 
+- Owner - owner, owner (by far the most interesting view because it encompasses all features)
+- Manager - user01, pass01
+- clerk - user02, pass02
+- salesperson - user03, pass03
+- user - no credentials, just ensure you're logged out and route to [http://3.147.185.195:8080/](http://3.147.185.195:8080/). Note that this view is the least interesting. 
 
 ## Description
 A fullstack car dealership app, used by employees and users. Users can search unsold cars, clerks can search unsold cars and order parts for them, salasmen can search sold and unsold cars and view sales statistics, and owners and managers can do all of the above and more. It is best to view the app with owner permissions. 
