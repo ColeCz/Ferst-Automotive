@@ -19,10 +19,6 @@ A fullstack car dealership app, used by employees and users. Users can search un
 - Designed schema
 - Designed a third of the backend logic, including the search_vehicles() function
 
-## Lacking Areas
-- the frontend does not currently show all backend functionality and I have no need to learn React, so I haven't fixed this
-- hopefully my vehicle search is working again, I had 60 lines of working code that a group mate kindly changed to 120 lines of not working code and I may not have fixed this yet
-
 ## Reference
 - Frontend: [http://3.147.185.195:8080/](http://3.147.185.195:8080/)
 - Backend: [http://3.147.185.195:8081/](http://3.147.185.195:8081/)
