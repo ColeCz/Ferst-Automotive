@@ -47,13 +47,19 @@ def validate_year(year=None):
 @blueprint.route("/", methods=["GET"])
 def search_vehicles():
 
-    # get all frontend parameters that will be used in the queries
+    # handle concatenation of wildcard operator for partial search here, avoids errors with psycopg
     keyword = request.args.get("keyword", None)
     keyword = (
-        f"%{keyword}%" if keyword else None # handle concatenation here to avoid psycopg errors
+        f"%{keyword}%" if keyword else None 
     )
+    vin = request.args.get("vin", None)
+    vin = (
+        f"{vin}%" if vin else None
+    )
+
+    # gather all frontend parameters that will be used in the queries
     parameters = {
-        "vin": request.args.get("vin"),
+        "vin": vin,
         "vehicle_type": request.args.get("vehicle_type"),
         "year": request.args.get("year"),
         "color": request.args.get("color"),

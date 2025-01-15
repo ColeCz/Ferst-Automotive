@@ -16,7 +16,7 @@ AND (COALESCE(%(vehicle_type)s, '') = '' OR v.vehicle_type = %(vehicle_type)s)
 AND (COALESCE(%(manufacturer)s, '') = '' OR v.manufacturer = %(manufacturer)s)
 AND (COALESCE(%(year)s, '') = '' OR v.model_year = %(year)s)
 AND (COALESCE(%(fuel_type)s, '') = '' OR v.fuel_type = %(fuel_type)s)
-AND (COALESCE(%(vin)s, '') = '' OR v.vin = %(vin)s)
+AND (COALESCE(%(vin)s, '') = '' OR v.vin ILIKE %(vin)s)
 AND (COALESCE(%(keyword)s, '') = '' OR v.description ILIKE %(keyword)s) 
 AND (COALESCE(%(color)s, '') = '' OR EXISTS (
     SELECT 1

@@ -17,7 +17,7 @@ LEFT JOIN (
     ON v.vin = pending_parts.vehicle_vin
 WHERE sold.vehicle_vin IS NULL
 AND pending_parts.vehicle_vin IS NULL
-AND (COALESCE(%(vin)s, '') = '' OR v.vin = %(vin)s)
+AND (COALESCE(%(vin)s, '') = '' OR v.vin ILIKE %(vin)s)
 AND (COALESCE(%(vehicle_type)s, '') = '' OR v.vehicle_type = %(vehicle_type)s)
 AND (COALESCE(%(manufacturer)s, '') = '' OR v.manufacturer = %(manufacturer)s)
 AND (COALESCE(%(year)s, '') = '' OR v.model_year = %(year)s)

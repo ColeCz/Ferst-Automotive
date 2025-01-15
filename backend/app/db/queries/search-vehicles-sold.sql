@@ -4,7 +4,7 @@ LEFT JOIN Color c ON v.vin = c.vin
 JOIN Transaction t ON v.vin = t.vehicle_vin
 JOIN Sale s ON t.trans_id = s.transactions
 WHERE 1=1
-    AND (COALESCE(%(vin)s, '') = '' OR v.vin = %(vin)s)
+    AND (COALESCE(%(vin)s, '') = '' OR v.vin ILIKE %(vin)s)
     AND (COALESCE(%(vehicle_type)s, '') = '' OR v.vehicle_type = %(vehicle_type)s)
     AND (COALESCE(%(manufacturer)s, '') = '' OR v.manufacturer = %(manufacturer)s)
     AND (COALESCE(%(year)s, '') = '' OR v.model_year = %(year)s)
