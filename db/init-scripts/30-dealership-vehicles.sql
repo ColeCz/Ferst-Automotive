@@ -830,3 +830,18 @@ INSERT INTO Vehicle (vin, vehicle_type, model_name, model_year, manufacturer, fu
 INSERT INTO Color (vin, color_name) VALUES ('B2LJMRR8IYC935453', 'Brown');
 INSERT INTO Vehicle (vin, vehicle_type, model_name, model_year, manufacturer, fuel_type, horsepower, description) VALUES ('L11QFDDJ7J7514581', 'Coupe', 'KA', '2006', 'Ford', 'Fuel Cell', 377, 'can be used as sports car; ');
 INSERT INTO Color (vin, color_name) VALUES ('L11QFDDJ7J7514581', 'Turquoise');
+
+
+-- adds image urls to existing vehicles. assigns default image based on vehicle type  
+UPDATE Vehicle
+SET image_url = CASE
+    WHEN vehicle_type = 'Convertible' THEN 'Convertible.jpg'
+    WHEN vehicle_type = 'Van' THEN 'Van.jpg'
+    WHEN vehicle_type = 'Minivan' THEN '_Minivan.jpg'
+    WHEN vehicle_type = 'Sedan' THEN 'Sedan.jpg'
+    WHEN vehicle_type = 'CUV' THEN '_CUV.jpg'
+    WHEN vehicle_type = 'Coupe' THEN 'Coupe.jpg'
+    WHEN vehicle_type = 'Truck' THEN 'Truck.jpg'
+    WHEN vehicle_type = 'SUV' THEN 'Suv.jpg'
+    ELSE 'Sedan.jpg'
+END;

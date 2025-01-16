@@ -144,3 +144,6 @@ CREATE TABLE Part
 	PRIMARY KEY (vehicle_vin, order_number, part_number),
 	FOREIGN KEY (vehicle_vin, order_number) REFERENCES PartOrder (vehicle_vin, order_number)
 );
+
+ALTER TABLE Vehicle 
+ADD image_url VARCHAR(20);
