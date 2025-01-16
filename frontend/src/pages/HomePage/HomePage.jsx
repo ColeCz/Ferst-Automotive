@@ -39,7 +39,7 @@ const HomePage = () => {
 
       console.log('Making API call with queryParams:', queryParams)
       const response = await fetch(
-        `http://3.147.185.195:8081/vehicle/?${queryParams}`,
+        `http://localhost:8081/vehicle/?${queryParams}`,
       )
       if (!response.ok) {
         throw new Error('Network response was not ok')
@@ -73,7 +73,7 @@ const HomePage = () => {
   const fetchMetrics = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch('http://3.147.185.195:8081/vehicle/')
+      const response = await fetch('http://localhost:8081/vehicle/')
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
@@ -110,7 +110,7 @@ const HomePage = () => {
     // fetches user role from session info
     try {
       console.log('Fetching session...')
-      const response = await fetch('http://3.147.185.195:8081/auth/session', {
+      const response = await fetch('http://localhost:8081/auth/session', {
         credentials: 'include',
       })
       if (!response.ok) {
