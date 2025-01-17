@@ -420,7 +420,7 @@ const HomePage = () => {
             {searchResults.map((vehicle, index) => (
               <React.Fragment key={index}>
                 {/* Row for the picture */}
-                <tr>
+                <tr id="vehicle-image-row">
                   <td colSpan="8" style={{ textAlign: "center" }}>
                     <img 
                       src={"/images/"+vehicle[8]} 
@@ -431,13 +431,13 @@ const HomePage = () => {
                 </tr>
                 {/* Row for the vehicle details */}
                 <tr>
-                  <td>{"vin: " + vehicle[0]}</td>
-                  <td>{vehicle[1]}</td>
-                  <td>{vehicle[2]}</td>
-                  <td>{vehicle[3]}</td>
-                  <td>{vehicle[4]}</td>
-                  <td>{vehicle[5]}</td>
-                  <td>{vehicle[6]}</td>
+                  <td>{"VIN# " + vehicle[0]}</td>
+                  <td>{"Type: "+vehicle[1]}</td>
+                  <td>{"Model: "+vehicle[2]}</td>
+                  <td>{"Year: "+vehicle[3]}</td>
+                  <td>{"Make: "+vehicle[4]}</td>
+                  <td>{"Fuel: "+vehicle[5]}</td>
+                  <td>{"HP: "+vehicle[6]}</td>
                   <td>
                     <Link
                       to={`/details/${vehicle[0]}`}

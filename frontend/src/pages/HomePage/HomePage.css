@@ -136,12 +136,11 @@
 .vehicles-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 .vehicles-table th,
 .vehicles-table td {
-  padding: 12px;
-  text-align: left;
+  padding: .7%;
+  text-align: center;
   border-bottom: 1px solid #ddd;
 }
 .vehicles-table th {
@@ -171,4 +170,12 @@ select {
 }
 .details-button:hover {
   background-color: #45a049;
+}
+
+#vehicle-image-row:hover {
+  color: inherit;
+  background-color: inherit;
+  border-color: inherit;
+  text-decoration: inherit;
+  cursor: default;
 }
