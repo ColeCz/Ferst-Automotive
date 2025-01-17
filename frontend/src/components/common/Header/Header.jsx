@@ -10,7 +10,7 @@ const Header = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:8081/auth/session', {
+        const response = await fetch('http://3.147.185.195:8081/auth/session', {
           credentials: 'include',
         })
         const data = await response.json()
@@ -28,7 +28,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:8081/auth/logout', {
+      const response = await fetch('http://3.147.185.195:8081/auth/logout', {
         method: 'POST',
         credentials: 'include',
       })
