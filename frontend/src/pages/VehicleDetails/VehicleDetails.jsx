@@ -62,6 +62,13 @@ function VehicleDetails() {
     <div className="vehicle-details-container">
       <div className="vehicle-info">
         <h2>Vehicle Details</h2>
+        <div style={{ textAlign: "center"}}>
+          <img 
+            src={"/images/"+vehicle.image_url}
+            alt={"/images/Sedan.jpg"}
+            style={{ maxWidth: "35%", height: "auto" }}
+          />
+        </div>
         {/* Basic Vehicle Information */}
         <div className="section basic-info">
           <h3>Basic Information</h3>
