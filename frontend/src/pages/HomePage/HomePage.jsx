@@ -416,37 +416,38 @@ const HomePage = () => {
       </div>
       <div className="search-results">
         <table className="vehicles-table">
-          <thead>
-            <tr>
-              <th>VIN</th>
-              <th>Vehicle Type</th>
-              <th>Model</th>
-              <th>Year</th>
-              <th>Manufacturer</th>
-              <th>Fuel Type</th>
-              <th>Horsepower</th>
-              <th>Details</th>
-            </tr>
-          </thead>
           <tbody>
             {searchResults.map((vehicle, index) => (
-              <tr key={index}>
-                <td>{vehicle[0]}</td>
-                <td>{vehicle[1]}</td>
-                <td>{vehicle[2]}</td>
-                <td>{vehicle[3]}</td>
-                <td>{vehicle[4]}</td>
-                <td>{vehicle[5]}</td>
-                <td>{vehicle[6]}</td>
-                <td>
-                  <Link
-                    to={`/details/${vehicle[0]}`}
-                    className="details-button"
-                  >
-                    Details
-                  </Link>
-                </td>
-              </tr>
+              <React.Fragment key={index}>
+                {/* Row for the picture */}
+                <tr>
+                  <td colSpan="8" style={{ textAlign: "center" }}>
+                    <img 
+                      src={"/images/"+vehicle[8]} 
+                      alt={"/images/Sedan.jpg"} 
+                      style={{ maxWidth: "35%", height: "auto" }} 
+                    />
+                  </td>
+                </tr>
+                {/* Row for the vehicle details */}
+                <tr>
+                  <td>{"vin: " + vehicle[0]}</td>
+                  <td>{vehicle[1]}</td>
+                  <td>{vehicle[2]}</td>
+                  <td>{vehicle[3]}</td>
+                  <td>{vehicle[4]}</td>
+                  <td>{vehicle[5]}</td>
+                  <td>{vehicle[6]}</td>
+                  <td>
+                    <Link
+                      to={`/details/${vehicle[0]}`}
+                      className="details-button"
+                    >
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>

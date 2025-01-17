@@ -1,4 +1,4 @@
-SELECT DISTINCT v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description, STRING_AGG(c.color_name, ', ') AS colors,t.trans_date AS sale_date, t.trans_price AS sale_price
+SELECT DISTINCT v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description, v.image_url, STRING_AGG(c.color_name, ', ') AS colors,t.trans_date AS sale_date, t.trans_price AS sale_price
 FROM Vehicle v
 LEFT JOIN Color c ON v.vin = c.vin
 JOIN Transaction t ON v.vin = t.vehicle_vin
@@ -15,6 +15,6 @@ WHERE 1=1
     FROM Color c_sub
     WHERE c_sub.vin = v.vin AND c_sub.color_name = %(color)s
 ))
-GROUP BY v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description, t.trans_date, t.trans_price
+GROUP BY v.vin, v.vehicle_type, v.model_name, v.model_year, v.manufacturer, v.fuel_type, v.horsepower, v.description, t.trans_date, t.trans_price, v.image_url
 ORDER BY v.vin ASC;
 
