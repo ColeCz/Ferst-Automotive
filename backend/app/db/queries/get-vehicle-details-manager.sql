@@ -24,6 +24,6 @@ LEFT JOIN Sale s ON st.trans_id = s.transactions
 LEFT JOIN Customer c ON pt.customer = c.customer_id -- Seller's contact info
 LEFT JOIN Customer bc ON st.customer = bc.customer_id -- Buyer's contact info (only if sold)
 WHERE v.vin = %(vin)s
-GROUP BY v.vin, pt.trans_date, pt.trans_price, p.condition, pc.username, part.part_number, part.part_description, part.current_status, part.unit_price, part.quantity, po.vendor, st.trans_date, st.trans_price, s.salesperson, c.email, c.phone_num, c.postal_code, c.state_abbrv, c.city, c.street, bc.email, bc.phone_num, bc.postal_code, bc.state_abbrv, bc.city, bc.street;
+GROUP BY v.vin, pt.trans_date, pt.trans_price, p.condition, pc.username, part.part_number, part.part_description, part.current_status, part.unit_price, part.quantity, po.vendor, st.trans_date, st.trans_price, s.salesperson, c.email, c.phone_num, c.postal_code, c.state_abbrv, c.city, c.street, bc.email, bc.phone_num, bc.postal_code, bc.state_abbrv, bc.city, bc.street, v.image_url;
 
 

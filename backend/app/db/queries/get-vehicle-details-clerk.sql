@@ -16,4 +16,4 @@ LEFT JOIN PartOrder po ON v.vin = po.vehicle_vin
 LEFT JOIN Part part ON po.vehicle_vin = part.vehicle_vin AND po.order_number = part.order_number
 LEFT JOIN Customer c ON pt.customer = c.customer_id -- Seller's contact info
 WHERE v.vin = %(vin)s
-GROUP BY v.vin, pt.trans_date, pt.trans_price, p.condition, pc.username, part.part_number, part.part_description, part.current_status, part.unit_price, part.quantity, po.vendor, c.email, c.phone_num, c.postal_code, c.state_abbrv, c.city, c.street;
+GROUP BY v.vin, pt.trans_date, pt.trans_price, p.condition, pc.username, part.part_number, part.part_description, part.current_status, part.unit_price, part.quantity, po.vendor, c.email, c.phone_num, c.postal_code, c.state_abbrv, c.city, c.street, v.image_url;
