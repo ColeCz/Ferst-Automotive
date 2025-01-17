@@ -3,23 +3,22 @@
 ## Using the Application
 Link: [http://3.147.185.195:8080/login/](http://3.147.185.195:8080/login/)
 
-Credentials (in the format of role - username, password)
-- Owner - owner, owner (by far the most interesting view because it encompasses all features)
-- Manager - user01, pass01
-- clerk - user02, pass02
-- salesperson - user03, pass03
-- user - no credentials, just ensure you're logged out and route to [http://3.147.185.195:8080/](http://3.147.185.195:8080/). Note that this view is the least interesting. 
+Login Credentials 
+- this app has several employee and user types. However, the cookies recently stopped persisting across pages and I can't use the cookies from login to set roles. So I manually set the role to "Owner", you can login with the username and password "owner"
+- if you go to the 'add vehicle' page, an example seller SSN you can use to add the vehicle is "784939607"
 
 ## Description
-A fullstack car dealership app, used by employees and users. Users can search unsold cars, clerks can search unsold cars and order parts for them, salasmen can search sold and unsold cars and view sales statistics, and owners and managers can do all of the above and more. It is best to view the app with owner permissions. 
+This is a fullstack car dealership app, it helps several employee types do their jobs and helps users find vehicles to buy. It achieves this through the vehicle search, which will return vehicles that users can do their tasks with (order parts, buy, sell, etc.). General users can search unsold cars and view the vehicle details, but need an employee to purchase vehicles. Clerks manage unsold vehicles, they order parts and decide when they are installed and the vehicle is available again. Salesmen can search sold and unsold cars and have a detailed view of many sales statistics, they can also sell vehicles to users. Owners and managers can do most all of the above. 
 
 ## My Contributions
 - Designed EER diagram
-- Contributed to relational mapping
-- Designed schema
-- Designed a third of the backend logic, including the search_vehicles() function
+- Contributed significantly to relational mapping model
+- Designed database schema
+- Implemented a third of the backend logic, including the entire vehicle search functionality for all roles
+- Modified the schema, queries and frontend to handle images
+- Contributed to the HTML and CSS on the home and details pages
+- Served the project with EC2
 
-## Reference
-- Frontend: [http://3.147.185.195:8080/](http://3.147.185.195:8080/)
-- Backend: [http://3.147.185.195:8081/](http://3.147.185.195:8081/)
-- pgAdmin: [http://3.147.185.195:8082/](http://3.147.185.195:8082/)
+## Lacking Areas
+- the cookies don't persist, so I can't show all of the role-based functionality. This randomly stopped working without any related code change, and I have tried 5-10 things to fix this to no avail. But I'm considering switching to https when I have the time
+- the frontend is lacking. There are a couple of backend/DB features that are working but aren't visible in the frontend, and I don't know react very well to continue this work. These include add and sell vehicles for owners/salesmen.
