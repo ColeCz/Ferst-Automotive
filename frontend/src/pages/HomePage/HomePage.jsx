@@ -447,6 +447,9 @@ const HomePage = () => {
                     </Link>
                   </td>
                 </tr>
+                <tr className="spacer-row" style={{ height: "100px" }}>
+                  {/* <td colSpan="8" style={{ border: "none", height: "100px" }}></td> */}
+                </tr>
               </React.Fragment>
             ))}
           </tbody>
