@@ -1,4 +1,4 @@
-# CS 6400 RDBMS Group Project
+# Car Dealership Project
 
 ## Using the Application
 Link: [http://3.147.185.195:8080/login/](http://3.147.185.195:8080/login/)
