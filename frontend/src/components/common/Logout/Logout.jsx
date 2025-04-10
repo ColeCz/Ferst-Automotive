@@ -7,7 +7,7 @@ const Logout = () => {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        const response = await fetch('http://3.147.185.195:8081/api/auth/logout', {
+        const response = await fetch('http://localhost/api/auth/logout', {
           method: 'POST',
           credentials: 'include',
         })

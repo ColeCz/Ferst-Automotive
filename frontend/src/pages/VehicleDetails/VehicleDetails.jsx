@@ -15,7 +15,7 @@ function VehicleDetails() {
       try {
         console.log('Fetching details for VIN:', vehicleId)
         
-        const response = await fetch(`http://3.147.185.195:8081/vehicle_details/get-vehicle-details/${vehicleId}?role=manager`, {
+        const response = await fetch(`http://localhost/vehicle_details/get-vehicle-details/${vehicleId}?role=manager`, {
           credentials: 'include',
         })
   

@@ -19,7 +19,7 @@ def create_app():
         supports_credentials=True,  # Enable credentials support (100% necessary for auth)
         resources={
             r"/*": {  # Apply to all routes
-                "origins": "http://3.147.185.195:8080",  # Frontend origin
+                "origins": "localhost",  # Frontend origin
                 "allow_credentials": True,
                 "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
                 "allow_headers": ["Content-Type", "Authorization"],

@@ -50,7 +50,7 @@ const VehicleForm = () => {
 
     try {
       const response = await fetch(
-        'http://3.147.185.195:8081/vehicle/add-vehicle',
+        'http://localhost/vehicle/add-vehicle',
         {
           method: 'POST',
           credentials: 'include',
