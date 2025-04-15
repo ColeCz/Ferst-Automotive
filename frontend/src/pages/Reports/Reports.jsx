@@ -13,7 +13,7 @@ const Reports = () => {
     setIsLoading(true)
     setDrilldownData(null) // to clear drilldown data when changing reports
     try {
-      let url = `http://3.147.185.195:8081/reports/${reportType}`
+      let url = `http://localhost:8081/reports/${reportType}`
 
       // for monthly sales, fetch all months
       if (reportType === 'monthly-sales') {
@@ -65,7 +65,7 @@ const Reports = () => {
     setIsLoading(true)
     try {
       const response = await fetch(
-        `http://3.147.185.195:8081/reports/monthly-sales-drilldown?month=${month}&year=${year}`,
+        `http://localhost:8081/reports/monthly-sales-drilldown?month=${month}&year=${year}`,
         { credentials: 'include' },
       )
       if (!response.ok) {
