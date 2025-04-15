@@ -147,3 +147,8 @@ CREATE TABLE Part
 
 ALTER TABLE Vehicle 
 ADD image_url VARCHAR(20);
+
+CREATE INDEX index_vehicle_name ON Vehicle (model_name);
+CREATE INDEX index_vehicle_manufacturer ON Vehicle (manufacturer); 
+CREATE INDEX index_vehicle_year ON Vehicle (model_year);
+CREATE INDEX index_vehicle_name_year ON Vehicle (model_name, model_year);
