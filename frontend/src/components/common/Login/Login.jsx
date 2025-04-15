@@ -31,7 +31,7 @@ const Login = () => {
       formDataToSend.append('username', formData.username)
       formDataToSend.append('password', formData.password)
 
-      const response = await fetch('http://localhost/auth/login', {
+      const response = await fetch('http://3.147.185.195:8081/auth/login', {
         method: 'POST',
         credentials: 'include', // Needed for session handling
         headers: {

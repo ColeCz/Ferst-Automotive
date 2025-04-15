@@ -49,7 +49,7 @@ const AddVehicleSearchCustomer = () => {
       console.log('Searching with params:', searchParams.toString())
 
       const response = await fetch(
-        `http://localhost/vehicle/search-customers?${searchParams.toString()}`,
+        `http://3.147.185.195:8081/vehicle/search-customers?${searchParams.toString()}`,
         {
           credentials: 'include',
         },
@@ -203,7 +203,7 @@ const AddVehicleSearchCustomer = () => {
       console.log('Sending query params:', queryParams.toString())
 
       const response = await fetch(
-        `http://localhost/vehicle/add-customer?${queryParams.toString()}`,
+        `http://3.147.185.195:8081/vehicle/add-customer?${queryParams.toString()}`,
         {
           method: 'GET',
           credentials: 'include',
