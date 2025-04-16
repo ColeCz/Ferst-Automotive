@@ -1,0 +1,90 @@
+INDEXING BEFORE AND AFTER RESULTS:
+
+    column                      indexed runtime         non-indexed runtime         non-indexed / indexed execution time   
+                     
+    model name/year             .052                    7.915                       152.211x
+    manufacturer                .683                    18.626                      27.27x
+    model year                  .912                    3.808                       4.18x
+    model name                  .053                    7.348                       138.64x
+
+
+
+
+BEGIN RAW EXPLAIN/ANALYZE DATA
+---------------------------------------------------------------------------------------------------------------------
+
+
+explain analyze select * from vehicle 
+where model_name = 'ELDORADO' 
+and model_year = '2010';
+
+"Seq Scan on vehicle  (cost=0.00..839.24 rows=1 width=86) (actual time=7.889..7.890 rows=0 loops=1)"
+"  Filter: (((model_name)::text = 'ELDORADO'::text) AND (model_year = '2010'::bpchar))"
+"  Rows Removed by Filter: 50349"
+"Planning Time: 0.252 ms"
+"Execution Time: 7.915 ms"
+
+"Bitmap Heap Scan on vehicle  (cost=4.36..30.25 rows=7 width=86) (actual time=0.028..0.029 rows=0 loops=1)"
+"  Recheck Cond: (((model_name)::text = 'ELDORADO'::text) AND (model_year = '2010'::bpchar))"
+"  ->  Bitmap Index Scan on index_vehicle_name_year  (cost=0.00..4.36 rows=7 width=0) (actual time=0.024..0.024 rows=0 loops=1)"
+"        Index Cond: (((model_name)::text = 'ELDORADO'::text) AND (model_year = '2010'::bpchar))"
+"Planning Time: 0.150 ms"
+"Execution Time: 0.052 ms"
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+explain analyze select * from vehicle where manufacturer = 'Porsche'
+
+"Seq Scan on vehicle  (cost=0.00..640.36 rows=7 width=86) (actual time=0.014..18.572 rows=1139 loops=1)"
+"  Filter: ((manufacturer)::text = 'Porsche'::text)"
+"  Rows Removed by Filter: 49210"
+"Planning Time: 0.354 ms"
+"Execution Time: 18.626 ms"
+
+"Bitmap Heap Scan on vehicle  (cost=8.33..34.85 rows=7 width=86) (actual time=0.105..0.645 rows=1135 loops=1)"
+"  Recheck Cond: ((manufacturer)::text = 'Porsche'::text)"
+"  Heap Blocks: exact=523"
+"  ->  Bitmap Index Scan on index_vehicle_manufacturer  (cost=0.00..8.33 rows=7 width=0) (actual time=0.063..0.063 rows=1135 loops=1)"
+"        Index Cond: ((manufacturer)::text = 'Porsche'::text)"
+"Planning Time: 0.268 ms"
+"Execution Time: 0.683 ms"
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+explain analyze select * from vehicle where model_year = '2010';
+
+"Seq Scan on vehicle  (cost=0.00..881.25 rows=1147 width=86) (actual time=0.011..3.720 rows=2176 loops=1)"
+"  Filter: (model_year = '2010'::bpchar)"
+"  Rows Removed by Filter: 48173"
+"Planning Time: 0.138 ms"
+"Execution Time: 3.808 ms"
+
+"Bitmap Heap Scan on vehicle  (cost=21.16..678.85 rows=1145 width=86) (actual time=0.118..0.863 rows=2151 loops=1)"
+"  Recheck Cond: (model_year = '2010'::bpchar)"
+"  Heap Blocks: exact=612"
+"  ->  Bitmap Index Scan on index_vehicle_year  (cost=0.00..20.88 rows=1145 width=0) (actual time=0.074..0.075 rows=2151 loops=1)"
+"        Index Cond: (model_year = '2010'::bpchar)"
+"Planning Time: 0.129 ms"
+"Execution Time: 0.912 ms"
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+explain analyze select * from vehicle where model_name = 'G9'
+
+"Seq Scan on vehicle  (cost=0.00..838.36 rows=5 width=86) (actual time=0.028..7.329 rows=5 loops=1)"
+"  Filter: ((model_name)::text = 'G9'::text)"
+"  Rows Removed by Filter: 50344"
+"Planning Time: 0.111 ms"
+"Execution Time: 7.348 ms"
+
+"Bitmap Heap Scan on vehicle  (cost=4.31..23.04 rows=5 width=86) (actual time=0.040..0.042 rows=5 loops=1)"
+"  Recheck Cond: ((model_name)::text = 'G9'::text)"
+"  Heap Blocks: exact=7"
+"  ->  Bitmap Index Scan on index_vehicle_name_year  (cost=0.00..4.31 rows=5 width=0) (actual time=0.021..0.022 rows=10 loops=1)"
+"        Index Cond: ((model_name)::text = 'G9'::text)"
+"Planning Time: 0.094 ms"
+"Execution Time: 0.053 ms"
+
