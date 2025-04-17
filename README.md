@@ -5,18 +5,10 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 
 ---
 
-## User / Role Types
-- Customers (buyers and sellers)
-- Clerks
-- Salesmen
-- Managers
-- Owner
-
-
 ## Features
 
 ### Features for Customers and All Employees
-- 🔒 **Role-based access control**: All user types have different features and views
+- 🔒 **Role-based access control**: All user types have different functionalities and views, there are customers (buyer or seller type), clerks, salesemen, managers, and an owner
 - 🚗 **Advanced vehicle search**: All users can search current vehicle inventory using 0-7 search parameters. The feature has role-based behaviour and is optimized with several indexes
 - 🧾 **Vehicle details pages**: Provides things like image and description
 
@@ -41,11 +33,11 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 
 ## Using the App
 
-### Viewing Live Demo
+### viewing live demo
 - Route to [http://3.147.185.195:8080/login/](http://3.147.185.195:8080/login/) and use "owner" for the username and password (this role has access to all features)
 - **Note:** I try to leave the server running when I have job applications out, but it could always be down
 
-### Running App Locally
+### running the app locally
 - Install docker on your machine 
 - Clone repo
 - Run "docker compose up -d --build" in the root project directory, it will automatically install requirements.txt, start and populate the db, then run the flask app and frontend. View at "http://localhost:8080/login/"
@@ -73,7 +65,7 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 ├── db/                          		# PostgreSQL setup scripts
 │   ├── data-prep-scripts/       		# Python scripts to populate vehicle transaction data
 │   ├── init-scripts/            		# Creates DB and DB user, adds seed data, runs raw SQL schema
-│   └── query-optimization-scripts/ 	# SQL script to insert 50k vals and test indexes. Contains data logs
+│   └── query-optimization-scripts/ 	# SQL script to insert 50k vals and test indexes + output data
 ├── frontend/                    	 	# React frontend (I did not do much with this, just some HTML)
 │   ├── deployment/              		# NGINX config
 │   ├── public/
@@ -111,7 +103,7 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 
 ## Query Optimization (WIP)
 
-### Reasoning for Each Index:
+### reasoning for each index:
 - **index_vehicle_vin:** useful because searches on this parameter will never involve other parameters (no one searches for a blue 0KAMFH817HG984940), so these queries will search a fully indexed column. Also, this column is serialized/auto indremented, so insertions cause no data rearrangement. Note vin is a primary key so it is auto-indexed
 - **index_model_name:** there are hundreds of models, so the index searches only a fraction of a percent of the vehicles, fully utilizing the heap
 - **index_vehicle_manufacturer:** there are ~50 manufacturers, searching with this param removes 98% of output
@@ -122,7 +114,7 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 - **index_sale_transaction** is a primary key so is already indexed, useful because it is used in foreign key joins
 
 
-### Runtime of Queries with and without Indexes (from EXPLAIN ANALYZE queries):
+### runtime of queries with and without indexes (from EXPLAIN ANALYZE queries):
 ```plaintext
 
 Column Searched             Indexed Runtime         Non-Indexed Runtime        Ratio
@@ -136,17 +128,17 @@ Column Searched             Indexed Runtime         Non-Indexed Runtime        R
 
 ## Technologies
 
-### Used by me:
+### used by me:
 - **Backend:** Python, Flask, Psycopg3, PostgreSQL
 - **Frontend:** HTML, CSS
 - **Infrastructure:** Docker, AWS EC2
 - **Other:** EER Diagrams, Postman
 
-### Additional Tech in the App:
+### additional tech in the app:
 - **Frontend:** React, NGINX
 
 
 ## Future Work / TODO
 - **Add redis based caching layer** - The indexes will not be useful while this table still his this few tuples, so I'm eager to implement caching. The vehicle search could be extremely performant if all vals existed in RAM, which would only give up 30kb (355 tuples * ~80 bytes per tuple)
 - **Fix errors** - cookies wont persist across pages, try implementing TLS certificate/HTTPS to give options when setting samesite attributes
-- **Enlist help from a frontend dev** - there are API and DB functionalities that aren't even accessible to or working for users, but I have no time/need to learn React
+- **Enlist help from a frontend dev** - there are API and DB functionalities that aren't even accessible to or working for users, but I have no time or need to learn React
