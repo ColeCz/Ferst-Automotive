@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const response = await fetch('http://localhost:8081/auth/session', {
+        const response = await fetch('http://3.147.185.195:8081/auth/session', {
           credentials: 'include',
         })
         const data = await response.json()
