@@ -35,7 +35,7 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 
 ### viewing live demo
 - Route to [http://3.147.185.195:8080/login/](http://3.147.185.195:8080/login/) and use "owner" for the username and password (this role has access to all features)
-- **Note:** I try to leave the server running when I have job applications out, but it could always be down
+- **Note:** I try to leave the server running when I have open job applications, but please feel free to reach out if the server is down.
 
 ### running the app locally
 - Install docker on your machine 
@@ -46,8 +46,8 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 - Run "docker compose down -v" to stop containers/application and clear volumes 
 
 ## Project Directory Layout <br>
-<details>
-<summary>📁 Click to expand project skeleton</summary>
+<!-- <details> -->
+<!-- <summary>📁 Click to expand project skeleton</summary> -->
 
 ```plaintext
 ├── backend/                      		# Backend Python app (Flask)
@@ -65,7 +65,7 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 ├── db/                          		# PostgreSQL setup scripts
 │   ├── data-prep-scripts/       		# Python scripts to populate vehicle transaction data
 │   ├── init-scripts/            		# Creates DB and DB user, adds seed data, runs raw SQL schema
-│   └── query-optimization-scripts/ 	# SQL script to insert 50k vals and test indexes + output data
+│   └── query-optimization-scripts/ 	# SQL script to insert 50k vals and test indexes
 ├── frontend/                    	 	# React frontend (I did not do much with this, just some HTML)
 │   ├── deployment/              		# NGINX config
 │   ├── public/
@@ -86,10 +86,10 @@ Ferst Automotive is a fullstack car dealership web application designed for user
 │       │   ├── SellVehicle/
 │       │   └── VehicleDetails/
 │       └── utils/
-└── relational-mapping-and-eer/        # 📊 Diagrams for EER and mapping
+└── relational-mapping-and-eer/        # 📊 Diagrams for EER and relational mapping
 
 ```
-</details>
+<!-- </details> -->
 
 
 ## My Contributions
